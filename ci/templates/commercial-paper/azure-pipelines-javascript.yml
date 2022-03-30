@@ -4,7 +4,7 @@
 
 steps:
   - script: |
-      ./network.sh up createChannel -ca -s couchdb
+      ./network.sh up createChannel -ca -s couchdb -i ${FABRIC_VERSION} # FABRIC_VERSION is set in ci/azure-pipelines.yml
 
       # Copy the connection profiles so they are in the correct organizations.
       cp "./organizations/peerOrganizations/org1.example.com/connection-org1.yaml" "../commercial-paper/organization/digibank/gateway/"
@@ -26,7 +26,7 @@ steps:
                                                 --package-id $PACKAGE_ID \
                                                 --sequence 1  \
                                                 --tls  \
-                                                --cafile "$ORDERER_CA"
+                                                --cafile $ORDERER_CA
 
       peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name papercontract -v 0 --sequence 1
     workingDirectory: commercial-paper/organization/magnetocorp
@@ -46,17 +46,17 @@ steps:
                                                 --package-id $PACKAGE_ID \
                                                 --sequence 1  \
                                                 --tls  \
-                                                --cafile "$ORDERER_CA"
+                                                --cafile $ORDERER_CA
 
       peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name papercontract -v 0 --sequence 1
 
       peer lifecycle chaincode commit -o localhost:7050 \
-                                --peerAddresses localhost:7051 --tlsRootCertFiles "${PEER0_ORG1_CA}" \
-                                --peerAddresses localhost:9051 --tlsRootCertFiles "${PEER0_ORG2_CA}" \
+                                --peerAddresses localhost:7051 --tlsRootCertFiles ${PEER0_ORG1_CA} \
+                                --peerAddresses localhost:9051 --tlsRootCertFiles ${PEER0_ORG2_CA} \
                                 --ordererTLSHostnameOverride orderer.example.com \
                                 --channelID mychannel --name papercontract -v 0 \
                                 --sequence 1 \
-                                --tls --cafile "$ORDERER_CA" --waitForEvent
+                                --tls --cafile $ORDERER_CA --waitForEvent
 
     workingDirectory: commercial-paper/organization/digibank
     displayName: Setup Commercial Paper Contract

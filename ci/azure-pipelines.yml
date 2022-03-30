@@ -3,35 +3,21 @@
 #
 
 trigger:
-  - main
+  - master
   - release-1.4
-  - release-2.2
 
 variables:
-  - name: FABRIC_VERSION
-    value: 2.4
-  - name: GO_BIN
-    value: $(Build.Repository.LocalPath)/bin
-  - name: GO_VER
-    value: 1.16.7
-  - name: NODE_VER
-    value: 16.x
-  - name: PATH
-    value: $(Build.Repository.LocalPath)/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin
-  - group: credentials
+  FABRIC_VERSION: 2.2
+  GO_BIN: $(Build.Repository.LocalPath)/bin
+  GO_VER: 1.14.6
+  NODE_VER: 12.x
+  PATH: $(Build.Repository.LocalPath)/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 
 jobs:
-  - job: REST_Sample
-    displayName: REST Server Sample
-    pool:
-      vmImage: ubuntu-20.04
-    steps:
-      - template: templates/asset-transfer-basic/azure-pipelines-rest.yml
-
   - job: CommercialPaper_Go
     displayName: Commercial Paper (Go)
     pool:
-      vmImage: ubuntu-20.04
+      vmImage: ubuntu-18.04
     steps:
       - template: templates/install-deps.yml
       - template: templates/commercial-paper/azure-pipelines-go.yml
@@ -39,7 +25,7 @@ jobs:
   - job: CommercialPaper_Java
     displayName: Commercial Paper (Java)
     pool:
-      vmImage: ubuntu-20.04
+      vmImage: ubuntu-18.04
     steps:
       - template: templates/install-deps.yml
       - template: templates/commercial-paper/azure-pipelines-java.yml
@@ -47,7 +33,7 @@ jobs:
   - job: CommercialPaper_JavaScript
     displayName: Commercial Paper (JavaScript)
     pool:
-      vmImage: ubuntu-20.04
+      vmImage: ubuntu-18.04
     steps:
       - template: templates/install-deps.yml
       - template: templates/commercial-paper/azure-pipelines-javascript.yml
@@ -55,7 +41,7 @@ jobs:
   - job: FabCar_Go
     displayName: FabCar (Go)
     pool:
-      vmImage: ubuntu-20.04
+      vmImage: ubuntu-18.04
     steps:
       - template: templates/install-deps.yml
       - template: templates/fabcar/azure-pipelines-go.yml
@@ -63,7 +49,7 @@ jobs:
   - job: FabCar_Java
     displayName: FabCar (Java)
     pool:
-      vmImage: ubuntu-20.04
+      vmImage: ubuntu-18.04
     steps:
       - template: templates/install-deps.yml
       - template: templates/fabcar/azure-pipelines-java.yml
@@ -71,7 +57,7 @@ jobs:
   - job: FabCar_JavaScript
     displayName: FabCar (JavaScript)
     pool:
-      vmImage: ubuntu-20.04
+      vmImage: ubuntu-18.04
     steps:
       - template: templates/install-deps.yml
       - template: templates/fabcar/azure-pipelines-javascript.yml
@@ -79,7 +65,7 @@ jobs:
   - job: Fabcar_TypeScript
     displayName: FabCar (TypeScript)
     pool:
-      vmImage: ubuntu-20.04
+      vmImage: ubuntu-18.04
     steps:
       - template: templates/install-deps.yml
       - template: templates/fabcar/azure-pipelines-typescript.yml
@@ -87,7 +73,69 @@ jobs:
   - job: Lint
     displayName: Lint
     pool:
-      vmImage: ubuntu-20.04
+      vmImage: ubuntu-18.04
+    strategy:
+      matrix:
+        Basic-Application-Go:
+          DIRECTORY: asset-transfer-basic
+          LANGUAGE: go
+          TYPE: application
+        Basic-Application-Java:
+          DIRECTORY: asset-transfer-basic
+          LANGUAGE: java
+          TYPE: application
+        Basic-Application-Javascript:
+          DIRECTORY: asset-transfer-basic
+          LANGUAGE: javascript
+          TYPE: application
+        Basic-Chaincode-Go:
+          DIRECTORY: asset-transfer-basic
+          LANGUAGE: go
+          TYPE: chaincode
+        Basic-Chaincode-Java:
+          DIRECTORY: asset-transfer-basic
+          LANGUAGE: java
+          TYPE: chaincode
+        Basic-Chaincode-Javascript:
+          DIRECTORY: asset-transfer-basic
+          LANGUAGE: javascript
+          TYPE: chaincode
+        Basic-Chaincode-Typescript:
+          DIRECTORY: asset-transfer-basic
+          LANGUAGE: typescript
+          TYPE: chaincode
+        Ledger-Application-Java:
+          DIRECTORY: asset-transfer-ledger-queries
+          LANGUAGE: java
+          TYPE: application
+        Ledger-Chaincode-Go:
+          DIRECTORY: asset-transfer-ledger-queries
+          LANGUAGE: go
+          TYPE: chaincode
+        Ledger-Chaincode-Javascript:
+          DIRECTORY: asset-transfer-ledger-queries
+          LANGUAGE: javascript
+          TYPE: chaincode
+        PrivateData-Application-Javascript:
+          DIRECTORY: asset-transfer-private-data
+          LANGUAGE: javascript
+          TYPE: application
+        PrivateData-Chaincode-Go:
+          DIRECTORY: asset-transfer-private-data
+          LANGUAGE: go
+          TYPE: chaincode
+        SBE-Chaincode-Typescript:
+          DIRECTORY: asset-transfer-sbe
+          LANGUAGE: typescript
+          TYPE: chaincode
+        SBE-Chaincode-Java:
+          DIRECTORY: asset-transfer-sbe
+          LANGUAGE: java
+          TYPE: chaincode
+        Secured-Chaincode-Go:
+          DIRECTORY: asset-transfer-secured-agreement
+          LANGUAGE: go
+          TYPE: chaincode
     steps:
       - task: GoTool@0
         inputs:
@@ -98,15 +146,13 @@ jobs:
         inputs:
           versionSpec: $(NODE_VER)
         displayName: Install Node.js
-      - script: ./ci/scripts/shellcheck.sh
-        displayName: Lint Shell Scripts
       - script: ./ci/scripts/lint.sh
         displayName: Lint Code
 
   - job: TestNetworkBasic
     displayName: Test Network
     pool:
-      vmImage: ubuntu-20.04
+      vmImage: ubuntu-18.04
     strategy:
       matrix:
         Basic-Go:
@@ -129,24 +175,10 @@ jobs:
         workingDirectory: test-network
         displayName: Run Test Network Basic Chaincode
 
-  - job: KubeTestNetworkBasic
-    displayName: Kube Test Network Basic
-    pool:
-      vmImage: ubuntu-20.04
-    strategy:
-      matrix:
-        Docker-Typescript:
-          CLIENT_LANGUAGE: typescript
-    steps:
-      - template: templates/install-k8s-deps.yml
-      - script: ../ci/scripts/run-k8s-test-network-basic.sh
-        workingDirectory: test-network-k8s
-        displayName: Run Kubernetes Test Network Basic Asset Transfer
-
   - job: TestNetworkLedger
     displayName: Test Network
     pool:
-      vmImage: ubuntu-20.04
+      vmImage: ubuntu-18.04
     strategy:
       matrix:
         Ledger-Go:
@@ -164,7 +196,7 @@ jobs:
   - job: TestNetworkPrivate
     displayName: Test Network
     pool:
-      vmImage: ubuntu-20.04
+      vmImage: ubuntu-18.04
     strategy:
       matrix:
         Private-Go:
@@ -179,7 +211,7 @@ jobs:
   - job: TestNetworkSBE
     displayName: Test Network
     pool:
-      vmImage: ubuntu-20.04
+      vmImage: ubuntu-18.04
     strategy:
       matrix:
         SBE-Typescript:
@@ -197,7 +229,7 @@ jobs:
   - job: TestNetworkSecured
     displayName: Test Network
     pool:
-      vmImage: ubuntu-20.04
+      vmImage: ubuntu-18.04
     strategy:
       matrix:
         Secured-Go:
@@ -212,7 +244,7 @@ jobs:
   - job: TestNetworkEvents
     displayName: Test Network
     pool:
-      vmImage: ubuntu-20.04
+      vmImage: ubuntu-18.04
     strategy:
       matrix:
         Events-Javascript:

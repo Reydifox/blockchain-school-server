@@ -1,8 +1,4 @@
-/*
- * Copyright IBM Corp. All Rights Reserved.
- *
- * SPDX-License-Identifier: Apache-2.0
- */
+
 
 'use strict';
 
@@ -10,6 +6,8 @@ const FabricCAServices = require('fabric-ca-client');
 const { Wallets } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
+
+module.exports = main;
 
 async function main() {
     try {
@@ -28,11 +26,11 @@ async function main() {
         console.log(`Wallet path: ${walletPath}`);
 
         // Check to see if we've already enrolled the admin user.
-        const identity = await wallet.get('admin');
-        if (identity) {
-            console.log('An identity for the admin user "admin" already exists in the wallet');
-            return;
-        }
+        // const identity = await wallet.get('admin');
+        // if (identity) {
+        //    console.log('An identity for the admin user "admin" already exists in the wallet');
+        //    return;
+        //}
 
         // Enroll the admin user, and import the new identity into the wallet.
         const enrollment = await ca.enroll({ enrollmentID: 'admin', enrollmentSecret: 'adminpw' });
@@ -53,4 +51,4 @@ async function main() {
     }
 }
 
-main();
+// main();

@@ -11,7 +11,7 @@ const secret_key = 'topsecret';
 const query_func = require('../fabcar/javascript/query.js');
 const register_func = require('../fabcar/javascript/registerUser.js');
 const enroll_admin = require('../fabcar/javascript/enrollAdmin.js');
-const e = require('express');
+const express = require('express');
 
 const app = express();
 app.use(express.urlencoded());
@@ -53,6 +53,7 @@ app.post('/login', async (req, res) =>{
     
 })
 
+// used for testing purposes, path '/protected' requires an auth token
 app.get('/protected', verify_token, (req, res) => {
     jwt.verify(req.token, secret_key, (err, auth_data) => {
         if(err){

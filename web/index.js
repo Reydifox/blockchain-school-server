@@ -1,8 +1,17 @@
 const express = require('express');
 const path = require('path');
+
+// for password hashing, will use when in employee registration is implemented
+const bcrypt = require('bcrypt');
+
+// json web token, used for login
+const jwt = require('jsonwebtoken');
+const secret_key = 'topsecret';
+
 const query_func = require('../fabcar/javascript/query.js');
 const register_func = require('../fabcar/javascript/registerUser.js');
 const enroll_admin = require('../fabcar/javascript/enrollAdmin.js');
+const e = require('express');
 
 const app = express();
 app.use(express.urlencoded());
@@ -10,7 +19,8 @@ app.use(express.json());
 
 
 // create admin user to allow creation of other users
-enroll_admin();
+// comment out if implementing functionality without the need to interact with the ledger
+// enroll_admin();
 
 
 app.get('/', (req, res) => {
@@ -26,10 +36,49 @@ app.post('/register', async (req, res) => {
     res.send(`Successful: ${result.result}, message: ${result.message}`)
 })
 
-app.get('/getferko', async (req, res) => {
-    let result = await query_func('queryStudentsByName', 'Ferko Mrkvicka');
-    res.send(result.toString());
+app.post('/login', async (req, res) =>{
+    
+    // TODO: retrieve user info from DB
+    const user = {
+        id: 1,
+        username: "test",
+        email: "email@email.com"
+    };
+    
+    jwt.sign({user: user}, secret_key, {expiresIn: '2h'}, (err, token) => {
+        res.json({
+            token: token
+        });
+    });
+    
 })
+
+app.get('/protected', verify_token, (req, res) => {
+    jwt.verify(req.token, secret_key, (err, auth_data) => {
+        if(err){
+            res.sendStatus(403);
+        } else{
+            res.json({
+                message: "Protected page accessed successfully.",
+                auth_data
+            })
+        }
+    });
+})
+
+function verify_token(req, res, next) {
+    const bearer_header = req.headers['authorization'];
+    if(typeof bearer_header !== 'undefined'){
+        const bearer = bearer_header.split(' ');
+        const bearer_token = bearer[1];
+        req.token = bearer_token;
+        next();
+    } else {
+        // return forbidden if token is invalid
+        res.sendStatus(403)
+    }
+}
+
 
 app.get('/:username/students', async (req, res) => {
     let result = await query_func(req.params.username, 'getAllStudents');

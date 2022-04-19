@@ -11,7 +11,6 @@ const secret_key = 'topsecret';
 const query_func = require('../fabcar/javascript/query.js');
 const register_func = require('../fabcar/javascript/registerUser.js');
 const enroll_admin = require('../fabcar/javascript/enrollAdmin.js');
-const express = require('express');
 
 const app = express();
 app.use(express.urlencoded());
@@ -20,7 +19,7 @@ app.use(express.json());
 
 // create admin user to allow creation of other users
 // comment out if implementing functionality without the need to interact with the ledger
-// enroll_admin();
+enroll_admin();
 
 
 app.get('/', (req, res) => {

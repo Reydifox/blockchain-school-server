@@ -17,4 +17,7 @@ cd ./fabcar/javascript
 npm install
 cd ../../web
 npm install
+echo "Downloading Hyperledger Fabric.."
+cd ../../
+curl -sSL https://bit.ly/2ysbOFE | bash -s
 echo "Installation done! Now you can run startServer.sh"

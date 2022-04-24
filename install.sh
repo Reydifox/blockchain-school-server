@@ -13,7 +13,7 @@ systemctl start docker
 systemctl enable docker
 usermod -a -G docker root
 echo "Preparing javascript environment.."
-cd ./ais-chain/javascript
+cd ./fabcar/javascript
 npm install
 cd ../../web
 npm install

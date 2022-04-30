@@ -16,6 +16,7 @@ const app = express();
 app.use(express.urlencoded());
 app.use(express.json());
 
+//const student = require('./Models/student')
 
 // create admin user to allow creation of other users
 // comment out if implementing functionality without the need to interact with the ledger
@@ -79,17 +80,40 @@ function verify_token(req, res, next) {
     }
 }
 
+const students = require('./Routes/students')
+const programme = require('./Routes/programme')
+const lecturers = require('./Routes/lecturers')
+const roles = require('./Routes/roles')
+const users = require('./Routes/users')
+const results = require('./Routes/results')
+const courses = require('./Routes/courses')
 
+
+app.use('/students', students)
+app.use('/programme', programme)
+app.use('/lecturers', lecturers)
+app.use('/roles', roles)
+app.use('/users', users)
+app.use('/results', results)
+app.use('/courses', courses)
+
+
+
+app.get('/request', async (req, res) => {
+    console.log(req.headers.authorization)
+    res.send(0)
+})
+/*
 app.get('/:username/students', async (req, res) => {
-    let result = await query_func(req.params.username, 'getAllStudents');
-    res.send(result.toString());
+    let result = await student.getAllStudents(req)
+    res.send(result.toString())
 })
 
-app.get(':username/students/:id', async (req, res) => {
-    let result = await query_func(req.params.username, 'queryStudentsById', req.params.id);
+app.get('/:username/students/:id', async (req, res) => {
+    let result = await student.getStudentById(req)
     res.send(result.toString());
 })
-
+*/
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Web server started on port ${PORT}`));

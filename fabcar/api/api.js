@@ -3,6 +3,7 @@ const couch = require('../config/couchDbConnection')
 const dbConfig = require('../config/dbConfig')
 const dbname = dbConfig.dbname
 
+
 async function getAllFromDb(entity_name){
     const view_url = `_design/${entity_name}/_view/${entity_name}_all`
     return couch.get(dbname, view_url)
@@ -26,6 +27,7 @@ async function getAllEntities(entity_name){
     }
 }
 
+
 async function getEntity(id){
     const entity_name = id.split("_")[0]
     const entity_location = getEntityLocation(entity_name)
@@ -42,22 +44,29 @@ async function getEntity(id){
     }
 }
 
+async function deleteEntity(id){
+    const entity_name = id.split("_")[0]
+    const entity_location = getEntityLocation(entity_name)
+    if (entity_location === 'db'){
+        const result = await getEntity(id)
+        if (result){
+            const response = await couch.del(dbname, result._id, result._rev)
+            console.log(response)
+            return response
+        }
+    }
+    else if(entity_location === 'ledger'){
+        //TODO: delete from ledger
+        console.log("Will be implemented in the future.")
+        return undefined
+    }
+}
+
+
 // used for testing purposes
 async function main(){
-    const entity_name = 'user'
-    const results = await getAllEntities(entity_name)
-
-    console.log(results)
-
-    const entity_id = 'course_1'
-    try{
-        const result = await(getEntity(entity_id))
-        console.log(result)
-    }
-    catch(e){
-        console.log(e)
-    }
-    
+    // const entity_name = 'user'
+    // const results = await getAllEntities(entity_name)
 }
 
 main()

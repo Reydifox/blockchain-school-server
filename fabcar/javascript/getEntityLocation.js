@@ -1,5 +1,5 @@
 const fs = require('fs')
-const raw_config_file = fs.readFileSync('../config/entity_config.json')
+const raw_config_file = fs.readFileSync('entityConfig.json')
 const config = JSON.parse(raw_config_file)
 
 function getEntityLocation(entity_name){

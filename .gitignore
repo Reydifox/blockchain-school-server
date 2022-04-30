@@ -21,3 +21,6 @@ jboss/server/minimal/work/**/*
 test-network
 web/node_modules
 web/wallet
+fabcar/node_modules
+fabcar/javascript/node_modules
+fabcar/config/node_modules

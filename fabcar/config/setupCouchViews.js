@@ -2,6 +2,8 @@ const couch = require('./couchDbConnection')
 const fs = require('fs')
 const raw_config_file = fs.readFileSync('entityConfig.json')
 const config = JSON.parse(raw_config_file)
+const dbConfig = require('./dbConfig')
+const dbname = dbConfig.dbname
 
 
 // only used for testing purposes
@@ -31,7 +33,7 @@ const entities = [
 
 
 function insert_doc(doc){
-    couch.insert("testing_db", doc).then(({data, headers, status}) => {
+    couch.insert(dbname, doc).then(({data, headers, status}) => {
         console.log(data)
     }, err => {
         console.log(err)
@@ -41,7 +43,7 @@ function insert_doc(doc){
 function main(){
     // uncomment below line to insert a few simple entities into DB
     // useful for testing purposes
-    //entities.forEach(element => insert_doc(element))
+    entities.forEach(element => insert_doc(element))
 
     config.db.forEach(element => {
         const view_name = `${element}_all`
@@ -60,5 +62,5 @@ function main(){
     })
 }
 
-main()
+module.exports = main
 

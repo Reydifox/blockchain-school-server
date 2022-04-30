@@ -1,10 +1,11 @@
 const getEntityLocation = require('../javascript/getEntityLocation')
 const couch = require('../config/couchDbConnection')
-const db_name = 'testing_db'
+const dbConfig = require('../config/dbConfig')
+const dbname = dbConfig.dbname
 
 async function getAllFromDb(entity_name){
     const view_url = `_design/${entity_name}/_view/${entity_name}_all`
-    return couch.get(db_name, view_url)
+    return couch.get(dbname, view_url)
 }
 
 
@@ -29,7 +30,7 @@ async function getEntity(id){
     const entity_name = id.split("_")[0]
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
-            const result = await couch.get(db_name, id)
+            const result = await couch.get(dbname, id)
             if(result.data){
                 return result.data
             }
@@ -44,7 +45,10 @@ async function getEntity(id){
 // used for testing purposes
 async function main(){
     const entity_name = 'user'
-    //const results = await getAllEntities(entity_name)
+    const results = await getAllEntities(entity_name)
+
+    console.log(results)
+
     const entity_id = 'course_1'
     try{
         const result = await(getEntity(entity_id))

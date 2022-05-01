@@ -23,5 +23,6 @@ web/node_modules
 web/wallet
 fabcar/node_modules
 fabcar/javascript/node_modules
+fabcar/wallet
 fabcar/config/node_modules
 web/wallet/admin.id

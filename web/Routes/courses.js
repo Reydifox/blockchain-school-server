@@ -43,7 +43,7 @@ router.route('/:id')
     res.json(req.body)
   })
   .delete(async (req, res) => {
-    res.send("deleted " + req.params.id)
+    res.sendStatus(204)
   })
 
 router.get('/results/:student_id', async (req, res) => {
@@ -72,6 +72,6 @@ router.post(':id/file', async (req, res) => {
 })
 
 router.delete('/:course_id/lecturer/:lecturer_id', async (req, res) => {
-  res.send("deleted " + req.params.lecturer_id)
+  res.sendStatus(204)
 })
 module.exports = router

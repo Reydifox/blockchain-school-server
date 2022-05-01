@@ -35,7 +35,7 @@ router.route('/:id')
     })
     // TODO - delete studenta
     .delete( async (req, res) => {
-        res.send("deleted " + req.params.id)
+        res.sendStatus(204)
     })
 
 router.get('/programme/:program_id', async (req, res) => {

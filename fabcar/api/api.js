@@ -1,6 +1,8 @@
 const getEntityLocation = require('../javascript/getEntityLocation')
 const couch = require('../config/couchDbConnection')
 const dbConfig = require('../config/dbConfig')
+const registerUser = require('../javascript/registerUser')
+const enrollAdmin = require('../javascript/enrollAdmin')
 const dbname = dbConfig.dbname
 
 
@@ -10,8 +12,8 @@ async function getAllFromDb(entity_name){
 }
 
 // retrieve all entities of a given type defined by entity_name,
-// calling getAllEntities(course) will retrieve all courses etc.
-async function getAllEntities(entity_name){
+// calling getAllEntities('id_example', 'course') will retrieve all courses etc.
+async function getAllEntities(user_id, entity_name){
     let result_arr = []
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
@@ -31,11 +33,11 @@ async function getAllEntities(entity_name){
 
 // retrieves a single entity based on its id
 // id example: 'entityname_123456'
-async function getEntity(id){
-    const entity_name = id.split("_")[0]
+async function getEntity(user_id, entity_id){
+    const entity_name = entity_id.split("_")[0]
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
-            const result = await couch.get(dbname, id)
+            const result = await couch.get(dbname, entity_id)
             if(result.data){
                 return result.data
             }
@@ -48,7 +50,7 @@ async function getEntity(id){
 }
 
 
-async function updateEntity(entity){
+async function updateEntity(user_id, entity){
     const entity_name = entity._id.split("_")[0]
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
@@ -65,7 +67,7 @@ async function updateEntity(entity){
 
 
 // 'entity' object must contain attribute 'entity_name'
-async function putEntity(entity){
+async function putEntity(user_id, entity){
     const entity_name = entity.entity_name
     // entity.entity_name is not needed
     delete entity.entity_name
@@ -88,11 +90,11 @@ async function putEntity(entity){
 }
 
 
-async function deleteEntity(id){
-    const entity_name = id.split("_")[0]
+async function deleteEntity(user_id, entity_id){
+    const entity_name = entity_id.split("_")[0]
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
-        const result = await getEntity(id)
+        const result = await getEntity(entity_id)
         if (result){
             const response = await couch.del(dbname, result._id, result._rev)
             console.log(response)
@@ -138,9 +140,16 @@ async function createUser(user){
                 db_user_data = temp_data
             }
             const db_response = await couch.insert(dbname, db_user_data)
-            if(response.status == 201){
+            console.log(db_response)
+            if(db_response.status == 201){
                 // request accepted
                 // TODO: insert user data into ledger
+                if (user_type === 'faculty_member'){
+                    // register user and create a wallet,
+                    // if the user is a faculty member
+                    // students do not have separate wallets
+                    await registerUser(user._id)
+                }
             }
         })
     }
@@ -152,23 +161,26 @@ async function deleteUser(user_id){
     const response = await couch.del(dbname, user._id, user._rev)
     if(response.status == 200){
         // accepted
-        // TODO: remove user from ledger
+        // TODO: remove user from ledger and delete wallet
     }
 }
 
 
 // used for testing purposes
 async function main(){
-    // const user = {
-    //     user_type: 'student',
-    //     study_info_id: 1,
-    //     absolvent_status_id: 1,
-    //     bank_account: 1,
-    //     first_name: 'ferko',
-    //     last_name: 'kalerab'
-    // }
+    const user = {
+        user_type: 'faculty_member',
+        study_info_id: 1,
+        absolvent_status_id: 1,
+        bank_account: 1,
+        first_name: 'ferko',
+        last_name: 'kalerab'
+    }
+    // await enrollAdmin()
+    await createUser(user)
     // await createUser(user)
     // deleteUser('user_af7e3416ad272b26fafca63790010b04')
+    // enrollAdmin()
 }
 
 main()

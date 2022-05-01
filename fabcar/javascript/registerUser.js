@@ -9,7 +9,7 @@ const path = require('path');
 
 // creates a new user identity for user 'username'
 // works by creating a new file system wallet with the given identity
-async function main(username = 'testuser') {
+async function main(user_id = 'testuser') {
     try {
 
         let result = {};
@@ -23,14 +23,14 @@ async function main(username = 'testuser') {
         const ca = new FabricCAServices(caURL);
 
         // Create a new file system based wallet for managing identities.
-        const walletPath = path.join(process.cwd(), 'wallet');
+        const walletPath = path.resolve(__dirname, '..', 'wallet');
         const wallet = await Wallets.newFileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
 
         // Check to see if we've already enrolled the user.
-        const userIdentity = await wallet.get(username);
+        const userIdentity = await wallet.get(user_id);
         if (userIdentity) {
-            result.message =  `An identity for the user ${username} already exists in the wallet`;
+            result.message =  `An identity for the user ${user_id} already exists in the wallet`;
             result.result = false;
             return result;
         }
@@ -51,11 +51,11 @@ async function main(username = 'testuser') {
         // Register the user, enroll the user, and import the new identity into the wallet.
         const secret = await ca.register({
             affiliation: 'org1.department1',
-            enrollmentID: username,
+            enrollmentID: user_id,
             role: 'client'
         }, adminUser);
         const enrollment = await ca.enroll({
-            enrollmentID: username,
+            enrollmentID: user_id,
             enrollmentSecret: secret
         });
         const x509Identity = {
@@ -66,8 +66,8 @@ async function main(username = 'testuser') {
             mspId: 'Org1MSP',
             type: 'X.509',
         };
-        await wallet.put(username, x509Identity);
-        result.message =  `Successfully registered and enrolled admin user ${username} and imported it into the wallet`;
+        await wallet.put(user_id, x509Identity);
+        result.message =  `Successfully registered and enrolled admin user ${user_id} and imported it into the wallet`;
         result.result = true;
         return result;
 

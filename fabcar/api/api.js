@@ -9,7 +9,8 @@ async function getAllFromDb(entity_name){
     return couch.get(dbname, view_url)
 }
 
-
+// retrieve all entities of a given type defined by entity_name,
+// calling getAllEntities(course) will retrieve all courses etc.
 async function getAllEntities(entity_name){
     let result_arr = []
     const entity_location = getEntityLocation(entity_name)
@@ -28,6 +29,8 @@ async function getAllEntities(entity_name){
 }
 
 
+// retrieves a single entity based on its id
+// id example: 'entityname_123456'
 async function getEntity(id){
     const entity_name = id.split("_")[0]
     const entity_location = getEntityLocation(entity_name)
@@ -43,6 +46,47 @@ async function getEntity(id){
         return undefined
     }
 }
+
+
+async function updateEntity(entity){
+    const entity_name = entity._id.split("_")[0]
+    const entity_location = getEntityLocation(entity_name)
+    if (entity_location === 'db'){
+        const response = await couch.update(dbname, entity)
+        console.log(response)
+        return response
+    }
+    else if(entity_location === 'ledger'){
+        //TODO: update in ledger
+        console.log("Will be implemented in the future.")
+        return undefined
+    }
+}
+
+
+// 'entity' object must contain attribute 'entity_name'
+async function putEntity(entity){
+    const entity_name = entity.entity_name
+    // entity.entity_name is not needed
+    delete entity.entity_name
+    const entity_location = getEntityLocation(entity_name)
+    if (entity_location === 'db'){
+        couch.uniqid().then(async ids => {
+            const generated_id = ids[0]
+            entity._id = entity_name + '_' + generated_id
+            const response = await couch.insert(dbname, entity)
+            console.log(response)
+            return response
+        })
+        
+    }
+    else if(entity_location === 'ledger'){
+        //TODO: put to ledger
+        console.log("Will be implemented in the future.")
+        return undefined
+    }
+}
+
 
 async function deleteEntity(id){
     const entity_name = id.split("_")[0]
@@ -65,8 +109,12 @@ async function deleteEntity(id){
 
 // used for testing purposes
 async function main(){
-    // const entity_name = 'user'
-    // const results = await getAllEntities(entity_name)
+    const new_course = {
+        entity_name: 'course',
+        name: 'Timovy projekt',
+        acronym: 'TP'
+    }
+    await putEntity(new_course)
 }
 
 main()

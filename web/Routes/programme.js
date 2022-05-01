@@ -22,6 +22,6 @@ router.route('/:id')
     res.json(req.body)
   })
   .delete(async (req, res) => {
-    res.send("deleted " + req.params.id)
+    res.sendStatus(204)
   })
 module.exports = router

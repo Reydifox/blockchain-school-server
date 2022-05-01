@@ -1,0 +1,33 @@
+{
+    "ledger": [
+        "student",
+        "address",
+        "thesis",
+        "faculty_member",
+        "course_result"
+    ],
+    "db" : [
+        "user",
+        "system_authentification",
+        "user_role",
+        "system_credibility",
+        "study_info",
+        "study_programme",
+        "study_form",
+        "study_field",
+        "study_type",
+        "faculty",
+        "university",
+        "publication_status",
+        "publication_type",
+        "publication_file",
+        "grading_record",
+        "final_result",
+        "midterm_result",
+        "seminar_grading_record",
+        "academic_year",
+        "lecturer_level",
+        "course_lecturer",
+        "course"
+    ]
+}

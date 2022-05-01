@@ -11,7 +11,7 @@ router.route('/')
     res.json([programme, programme])
   })
   .post(async (req, res) => {
-    res.send('newProgramme')
+    res.json(req.body)
   })
 
 router.route('/:id')
@@ -19,9 +19,9 @@ router.route('/:id')
     res.json(programme)
   })
   .put(async (req, res) => {
-    res.send('programmeUpdated')
+    res.json(req.body)
   })
   .delete(async (req, res) => {
-    res.send('deleted')
+    res.send("deleted " + req.params.id)
   })
 module.exports = router

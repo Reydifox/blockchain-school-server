@@ -22,18 +22,18 @@ router.route('/:course_id/:student_id')
       res.json(result)
     })
     .post(async (req, res) => {
-      res.send('studentsCourseResultsAdded')
+      res.json(req.body)
     })
     .put(async (req, res) => {
-      res.send('studentsCourseResultsUpdated')
+      res.json(req.body)
     })
 
 router.route('/final/:course_id/:student_id')
     .post(async (req, res) => {
-        res.send('studentsFinalCourseResultsAdded')
+      res.json(req.body)
     })
     .put(async (req, res) => {
-        res.send('studentsFinalCourseResultsUpdated')
+      res.json(req.body)
     })
     
 module.exports = router

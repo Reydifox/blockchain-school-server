@@ -12,17 +12,17 @@ router.route('/')
     res.json([role, role])
   })
   .post(async (req, res) => {
-    res.send('roleAdded')
+    res.json(req.body)
   })
 router.route('/:id')
   .get(async (req, res) => {
     res.json(role)
   })
   .put(async (req, res) => {
-    res.send('roleUpdated')
+    res.json(req.body)
   })
   .delete(async (req, res) => {
-    res.send('roleDeleted')
+    res.send("deleted " + req.params.id)
   })
 
 module.exports = router

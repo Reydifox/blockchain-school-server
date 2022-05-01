@@ -17,7 +17,7 @@ router.route('/')
     res.json([person, person])
   })
   .post(async (req, res) => {
-    res.send('AddLecturer')
+    res.json(req.body)
   })
 
 router.get('/:id', async (req, res) => {

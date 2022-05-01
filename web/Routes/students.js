@@ -20,7 +20,7 @@ router.route('/')
     })
     // TODO - pridanie studenta
     .post( async (req, res) => {
-        res.send(req.body)
+       res.json(req.body)
     })
 
 router.route('/:id')
@@ -31,11 +31,11 @@ router.route('/:id')
     })
     // TODO - edit studenta
     .put( async (req, res) => {
-        res.send(req.body)
+        res.json(req.body)
     })
     // TODO - delete studenta
     .delete( async (req, res) => {
-        res.send("deleted")
+        res.send("deleted " + req.params.id)
     })
 
 router.get('/programme/:program_id', async (req, res) => {
@@ -45,6 +45,6 @@ router.get('/programme/:program_id', async (req, res) => {
 })
 
 router.post('/:id/course/:course_id', async (req, res) => {
-    res.send("1")
+    res.json(req.body)
 })
 module.exports = router

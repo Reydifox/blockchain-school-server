@@ -33,17 +33,17 @@ router.route('/')
     res.json([course, course])
   })
   .post(async (req, res) => {
-    res.send(req.body)
+    res.json(req.body)
   })
 router.route('/:id')
   .get(async (req, res) => {
     res.json(course_detail)
   })
   .put(async (req, res) => {
-    res.send('1')
+    res.json(req.body)
   })
   .delete(async (req, res) => {
-    res.send('deleted')
+    res.send("deleted " + req.params.id)
   })
 
 router.get('/results/:student_id', async (req, res) => {
@@ -64,14 +64,14 @@ router.get('/:id/file', async (req, res) => {
 })
 
 router.post('/:id/lecturer', async (req, res) => {
-  res.send('1')
+  res.json(req.body)
 })
 
 router.post(':id/file', async (req, res) => {
   res.send('1')
 })
 
-router.delete('/:course_id/lecturer/:lecturer:id', async (req, res) => {
-  res.send('deleted')
+router.delete('/:course_id/lecturer/:lecturer_id', async (req, res) => {
+  res.send("deleted " + req.params.lecturer_id)
 })
 module.exports = router

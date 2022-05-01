@@ -42,16 +42,16 @@ router.route('/:id')
     res.json(user)
   })
   .put(async (req, res) => {
-    res.send('userUpdated')
+    res.json(req.body)
   })
   .delete(async (req, res) => {
-    res.send('userDeleted')
+    res.send("deleted " + req.params.id)
   })
 
 router.put('/:id/roles', async (req, res) => {
-  res.send('userRolesUpdated')
+  res.json(req.body)
 })
 router.post('/users', async (req, res) => {
-  res.send('userAdded')
+  res.json(req.body)
 })
 module.exports = router

@@ -14,11 +14,12 @@ systemctl enable docker
 usermod -a -G docker root
 echo "Preparing javascript environment.."
 cd ./fabcar/javascript
-npm install
+sudo npm install
 cd ../config
-npm install
+sudo npm install
 cd ../../web
-npm install
+sudo npm install
+sudo npm install bcrypt --unsafe-perms
 echo "Downloading Hyperledger Fabric.."
 cd ../../
 curl -sSL https://bit.ly/2ysbOFE | bash -s

@@ -107,14 +107,57 @@ async function deleteEntity(id){
 }
 
 
+async function createUser(user){
+    // user_type is either student or faculty_member
+    const user_type = user.user_type
+    delete user.user_type
+    if (user_type === 'student' || user_type === 'faculty_member'){
+        couch.uniqid().then(async ids => {
+            const generated_id = ids[0]
+            const user_id = 'user_' + generated_id
+            user._id = user_id
+            let db_user_data = {}
+            let ledger_user_data = {}
+            if (user_type === 'student'){
+                ledger_user_data = {
+                    _id: user_id,
+                    study_info_id: user.study_info_id,
+                    absolvent_status_id: user.absolvent_status_id,
+                    bank_account: user.bank_account
+                }
+                const {study_info_id, absolvent_status_id, bank_account, ...temp_data} = user
+                db_user_data = temp_data
+            }
+            else {
+                ledger_user_data = {
+                    _id: user_id,
+                    secondary_auth_id: user.study_info_id,
+                    user_role_id: user.user_role_id
+                }
+                const {secondary_auth_id, user_role_id, ...temp_data} = user
+                db_user_data = temp_data
+            }
+            const db_response = await couch.insert(dbname, db_user_data)
+            if(response.status == 201){
+                // request accepted
+                // TODO: insert user data into ledger
+            }
+        })
+    }
+}
+
+
 // used for testing purposes
 async function main(){
-    const new_course = {
-        entity_name: 'course',
-        name: 'Timovy projekt',
-        acronym: 'TP'
+    const user = {
+        user_type: 'student',
+        study_info_id: 1,
+        absolvent_status_id: 1,
+        bank_account: 1,
+        first_name: 'ferko',
+        last_name: 'kalerab'
     }
-    await putEntity(new_course)
+    await createUser(user)
 }
 
 main()

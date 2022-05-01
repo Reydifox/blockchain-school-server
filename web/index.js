@@ -17,11 +17,6 @@ app.use(express.urlencoded());
 app.use(express.json());
 
 
-// create admin user to allow creation of other users
-// comment out if implementing functionality without the need to interact with the ledger
-enroll_admin();
-
-
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })

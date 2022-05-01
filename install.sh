@@ -15,6 +15,8 @@ usermod -a -G docker root
 echo "Preparing javascript environment.."
 cd ./fabcar/javascript
 npm install
+cd ../config
+npm install
 cd ../../web
 npm install
 echo "Downloading Hyperledger Fabric.."

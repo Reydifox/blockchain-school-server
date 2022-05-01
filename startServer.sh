@@ -2,7 +2,10 @@
 echo "Starting fabric.."
 cd fabcar
 ./startFabric.sh javascript
+echo "Setting up DB..."
+cd config
+node setupDb.js
 echo "Starting node server.."
-cd ../web
+cd ../../web
 node index.js
 echo "Execution done!"

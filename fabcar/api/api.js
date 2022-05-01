@@ -147,17 +147,28 @@ async function createUser(user){
 }
 
 
+async function deleteUser(user_id){
+    const user = await getEntity(user_id)
+    const response = await couch.del(dbname, user._id, user._rev)
+    if(response.status == 200){
+        // accepted
+        // TODO: remove user from ledger
+    }
+}
+
+
 // used for testing purposes
 async function main(){
-    const user = {
-        user_type: 'student',
-        study_info_id: 1,
-        absolvent_status_id: 1,
-        bank_account: 1,
-        first_name: 'ferko',
-        last_name: 'kalerab'
-    }
-    await createUser(user)
+    // const user = {
+    //     user_type: 'student',
+    //     study_info_id: 1,
+    //     absolvent_status_id: 1,
+    //     bank_account: 1,
+    //     first_name: 'ferko',
+    //     last_name: 'kalerab'
+    // }
+    // await createUser(user)
+    // deleteUser('user_af7e3416ad272b26fafca63790010b04')
 }
 
 main()

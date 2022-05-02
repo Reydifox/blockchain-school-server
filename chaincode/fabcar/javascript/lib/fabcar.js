@@ -5,31 +5,40 @@ const { Contract } = require('fabric-contract-api');
 class FabCar extends Contract {
 
     async initLedger(ctx) {
-        let students = [
+        // DELETE BODY OF THIS FUNCTION WHEN DEPLOYING
+        const default_entities = [
             {
-                "first_name" : "Janko",
-                "last_name" : "Hrasko",
+                _id: 'user_0',
+                user_type: 'student',
+                first_name: 'Juraj',
+                last_name: 'Janosik'
             },
             {
-                "first_name" : "Ferko",
-                "last_name" : "Mrkvicka",
+                _id: 'user_1',
+                user_type: 'student',
+                first_name: 'Ferko',
+                last_name: 'Mrkvicka'
             },
             {
-                "first_name" : "Juraj",
-                "last_name" : "Janosik",
+                _id: 'user_2',
+                user_type: 'faculty_member',
+                first_name: 'Janko',
+                last_name: 'Hrasko'
             }
-        ]
-        let index = 0;
-        for (let student of students){
-            let temp_student = JSON.stringify(student);
-            await ctx.stub.putState("student_" + index, temp_student);
-            index++;
+        ];
+        
+        for(let entity of default_entities){
+            const id = entity._id;
+            delete entity._id;
+            const temp_entity = JSON.stringify(entity);
+            await ctx.stub.putState(id, temp_entity);
         }
+
     }
 
-    async getStudent(ctx, student_id){
-        let student = await ctx.stub.getState(student_id);
-        return student.toString();
+    async getEntityById(ctx, student_id){
+        const student = await ctx.stub.getState(student_id)
+        return student
     }
 
     async putStudent(ctx, id, first_name, last_name){

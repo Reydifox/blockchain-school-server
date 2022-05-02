@@ -14,7 +14,7 @@ async function main(username, query_function, ...args) {
         const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
         // Create a new file system based wallet for managing identities.
-        const walletPath = path.join(process.cwd(), 'wallet');
+        const walletPath = path.resolve(__dirname, '..', 'wallet');
         const wallet = await Wallets.newFileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
 
@@ -26,8 +26,6 @@ async function main(username, query_function, ...args) {
             return;
         }
 
-        console.log("IDENTITY:" + identity)
-
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
         await gateway.connect(ccp, { wallet, identity: username, discovery: { enabled: true, asLocalhost: true } });
@@ -38,24 +36,17 @@ async function main(username, query_function, ...args) {
         // Get the contract from the network.
         const contract = network.getContract('fabcar');
 
-        // MY_COMMENT
-        // getting one student by specified id
-        // const result = await contract.evaluateTransaction('getStudent', 'student_02');
-        // console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
-
-        // MY_COMMENT
-        // getting all students
-        // const result = await contract.evaluateTransaction('getAllStudents');
-        // console.log(`Transaction successfully evaluated, result is: \n ${result.toString()} `)
-
-        // MY_COMMENT
-        // getting students by name
+        
         const result = await contract.evaluateTransaction(query_function, ...args);
-        // console.log(`Transaction complete, result: ${result.toString()}`);
-        return result.toString();
+        const full_response = result.toString()
+        const response_data_buffer = Buffer.from(JSON.parse(full_response).data)
+        const response_data_json_string = Buffer.from(response_data_buffer).toString()
+        const response_data_json = JSON.parse(response_data_json_string)
+        console.log(response_data_json)
 
         // Disconnect from the gateway.
         await gateway.disconnect();
+        return response_data_json;
         
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);

@@ -54,10 +54,15 @@ async function getEntity(user_id, entity_id){
     else if(entity_location === 'ledger'){
         const response = await ledger_query(user_id, 'getEntity', entity_id)
         const respone_str = response.toString()
+        const temp = Buffer.from(respone_str).toString()
         const response_json = JSON.parse(respone_str)
-        let response_data = JSON.parse(Buffer.from(response_json.data).toString())
-        response_data._id = entity_id
-        return response_data
+        console.log(temp)
+        
+        // const response_data_buffer = Buffer.from(response_json.data)
+        // const temp = response_data_buffer.toString()
+        
+        //response_data._id = entity_id
+        // return response_data_buffer
     }
 }
 
@@ -95,9 +100,13 @@ async function putEntity(user_id, entity){
         
     }
     else if(entity_location === 'ledger'){
-        //TODO: put to ledger
-        console.log("Will be implemented in the future.")
-        return undefined
+        couch.uniqid().then(async ids => {
+            const generated_id = ids[0]
+            const id = entity_name + '_' + generated_id
+            console.log(entity)
+            const response = await ledger_invoke(user_id, 'putEntity', id, entity)
+            return response
+        })
     }
 }
 
@@ -185,7 +194,13 @@ async function deleteUser(user_id){
 
 // used for testing purposes
 async function main(){
-    
+    const entity = {
+        entity_name: 'thesis',
+        name: 'testing_thesis'
+    }
+    // const response = await putEntity('admin', entity)
+    const result = await getEntity('student', 'thesis_1747fb05212d86b45b2c71e053000f4c')
+    console.log(result)
 }
 
 main()

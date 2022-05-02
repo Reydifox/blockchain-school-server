@@ -10,13 +10,11 @@ class FabCar extends Contract {
 
     async getEntity(ctx, entity_id){
         const full_response = await ctx.stub.getState(entity_id)
-        console.log(full_response)
-        console.log(full_response.toString())
-        return full_response
+        return full_response.toString()
     }
 
-    async putEntity(ctx, entity){
-        // TODO
+    async putEntity(ctx, entity_id, entity){
+        const full_response = await ctx.stub.putState(entity_id, Buffer.from(JSON.stringify(entity)))
     }
 
     async deleteEntity(ctx, entity_id){

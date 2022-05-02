@@ -14,6 +14,7 @@ async function getAllFromDb(entity_name){
 // retrieve all entities of a given type defined by entity_name,
 // calling getAllEntities('id_example', 'course') will retrieve all courses etc.
 async function getAllEntities(user_id, entity_name){
+    let result = {}
     let result_arr = []
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
@@ -21,7 +22,8 @@ async function getAllEntities(user_id, entity_name){
         response.data.rows.forEach(element => {
             result_arr.push(element.value)
         });
-        return result_arr
+        result.result = result_arr
+        return result
     }
     else if(entity_location === 'ledger'){
         //TODO: retrieve from ledger

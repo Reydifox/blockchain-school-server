@@ -36,17 +36,11 @@ async function main(username, query_function, ...args) {
         // Get the contract from the network.
         const contract = network.getContract('fabcar');
 
-        
         const result = await contract.evaluateTransaction(query_function, ...args);
-        const full_response = result.toString()
-        const response_data_buffer = Buffer.from(JSON.parse(full_response).data)
-        const response_data_json_string = Buffer.from(response_data_buffer).toString()
-        const response_data_json = JSON.parse(response_data_json_string)
-        console.log(response_data_json)
 
         // Disconnect from the gateway.
         await gateway.disconnect();
-        return response_data_json;
+        return result;
         
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);

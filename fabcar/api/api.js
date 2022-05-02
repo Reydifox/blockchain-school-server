@@ -57,7 +57,7 @@ async function updateEntity(user_id, entity){
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
         const response = await couch.update(dbname, entity)
-        console.log(response)
+        // console.log(response)
         return response
     }
     else if(entity_location === 'ledger'){
@@ -96,10 +96,10 @@ async function deleteEntity(user_id, entity_id){
     const entity_name = entity_id.split("_")[0]
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
-        const result = await getEntity(entity_id)
+        const result = await getEntity(user_id, entity_id)
         if (result){
             const response = await couch.del(dbname, result._id, result._rev)
-            console.log(response)
+            //console.log(response)
             return response
         }
     }
@@ -170,19 +170,7 @@ async function deleteUser(user_id){
 
 // used for testing purposes
 async function main(){
-    const user = {
-        user_type: 'faculty_member',
-        study_info_id: 1,
-        absolvent_status_id: 1,
-        bank_account: 1,
-        first_name: 'ferko',
-        last_name: 'kalerab'
-    }
-    // await enrollAdmin()
-    await createUser(user)
-    // await createUser(user)
-    // deleteUser('user_af7e3416ad272b26fafca63790010b04')
-    // enrollAdmin()
+    
 }
 
 main()

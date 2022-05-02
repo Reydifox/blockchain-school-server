@@ -174,3 +174,10 @@ async function main(){
 }
 
 main()
+
+module.exports.getEntity = getEntity
+module.exports.putEntity = putEntity
+module.exports.updateEntity = updateEntity
+module.exports.deleteEntity = deleteEntity
+module.exports.createUser = createUser
+module.exports.deleteUser = deleteUser

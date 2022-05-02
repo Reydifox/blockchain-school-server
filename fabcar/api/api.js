@@ -114,9 +114,14 @@ async function deleteEntity(user_id, entity_id){
         }
     }
     else if(entity_location === 'ledger'){
-        //TODO: delete from ledger
-        console.log("Will be implemented in the future.")
-        return undefined
+        const response = await ledger_invoke(user_id, 'deleteEntity', entity_id)
+        // The response in not very useful when using ledger_invoke(),
+        // because the ledger always returns an empty buffer,
+        // regardless if the operation is successful or not.
+        // Might be better to return a manually created response,
+        // created after some kind of check, e.g. if the entity to be deleted exists.
+        const stuff = response.toString()
+        return stuff
     }
 }
 
@@ -180,8 +185,7 @@ async function deleteUser(user_id){
 
 // used for testing purposes
 async function main(){
-    const response = await getEntity('admin', 'thesis_0')
-    console.log(response)
+    
 }
 
 main()

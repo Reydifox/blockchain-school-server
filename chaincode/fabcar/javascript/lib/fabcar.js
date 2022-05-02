@@ -19,6 +19,11 @@ class FabCar extends Contract {
         // TODO
     }
 
+    async deleteEntity(ctx, entity_id){
+        const response = await ctx.stub.deleteState(entity_id)
+        return response
+    }
+
     async getAllEntities(ctx, entity_name){
         const start_key = '';
         const end_key = '';

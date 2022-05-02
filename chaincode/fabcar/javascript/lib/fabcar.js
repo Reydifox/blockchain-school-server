@@ -14,7 +14,7 @@ class FabCar extends Contract {
     }
 
     async putEntity(ctx, entity_id, entity){
-        const full_response = await ctx.stub.putState(entity_id, Buffer.from(JSON.stringify(entity)))
+        const full_response = await ctx.stub.putState(entity_id, Buffer.from(entity))
     }
 
     async deleteEntity(ctx, entity_id){

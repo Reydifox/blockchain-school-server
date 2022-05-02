@@ -3,6 +3,8 @@ const couch = require('../config/couchDbConnection')
 const dbConfig = require('../config/dbConfig')
 const registerUser = require('../javascript/registerUser')
 const enrollAdmin = require('../javascript/enrollAdmin')
+const ledger_query = require('../javascript/query')
+const ledger_invoke = require('../javascript/invoke')
 const dbname = dbConfig.dbname
 
 
@@ -22,14 +24,19 @@ async function getAllEntities(user_id, entity_name){
         response.data.rows.forEach(element => {
             result_arr.push(element.value)
         });
-        result.result = result_arr
-        return result
     }
     else if(entity_location === 'ledger'){
-        //TODO: retrieve from ledger
-        console.log("Will be implemented in the future.")
-        return undefined
+        const response = await ledger_query(user_id, 'getAllEntities', entity_name)
+        const response_str = response.toString()
+        const response_json = JSON.parse(response_str)
+        response_json.result.forEach(element => {
+            let temp_obj = element.Record
+            temp_obj._id = element.Key
+            result_arr.push(temp_obj)
+        })
     }
+    result.result = result_arr
+    return result
 }
 
 
@@ -45,9 +52,12 @@ async function getEntity(user_id, entity_id){
             }
     }
     else if(entity_location === 'ledger'){
-        //TODO: retrieve from ledger
-        console.log("Will be implemented in the future.")
-        return undefined
+        const response = await ledger_query(user_id, 'getEntity', entity_id)
+        const respone_str = response.toString()
+        const response_json = JSON.parse(respone_str)
+        let response_data = JSON.parse(Buffer.from(response_json.data).toString())
+        response_data._id = entity_id
+        return response_data
     }
 }
 
@@ -170,7 +180,8 @@ async function deleteUser(user_id){
 
 // used for testing purposes
 async function main(){
-    
+    const response = await getEntity('admin', 'thesis_0')
+    console.log(response)
 }
 
 main()

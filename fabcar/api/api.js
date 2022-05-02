@@ -14,6 +14,7 @@ async function getAllFromDb(entity_name){
 // retrieve all entities of a given type defined by entity_name,
 // calling getAllEntities('id_example', 'course') will retrieve all courses etc.
 async function getAllEntities(user_id, entity_name){
+    let result = {}
     let result_arr = []
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
@@ -21,7 +22,8 @@ async function getAllEntities(user_id, entity_name){
         response.data.rows.forEach(element => {
             result_arr.push(element.value)
         });
-        return result_arr
+        result.result = result_arr
+        return result
     }
     else if(entity_location === 'ledger'){
         //TODO: retrieve from ledger
@@ -55,7 +57,7 @@ async function updateEntity(user_id, entity){
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
         const response = await couch.update(dbname, entity)
-        console.log(response)
+        // console.log(response)
         return response
     }
     else if(entity_location === 'ledger'){
@@ -94,10 +96,10 @@ async function deleteEntity(user_id, entity_id){
     const entity_name = entity_id.split("_")[0]
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
-        const result = await getEntity(entity_id)
+        const result = await getEntity(user_id, entity_id)
         if (result){
             const response = await couch.del(dbname, result._id, result._rev)
-            console.log(response)
+            //console.log(response)
             return response
         }
     }
@@ -168,19 +170,7 @@ async function deleteUser(user_id){
 
 // used for testing purposes
 async function main(){
-    const user = {
-        user_type: 'faculty_member',
-        study_info_id: 1,
-        absolvent_status_id: 1,
-        bank_account: 1,
-        first_name: 'ferko',
-        last_name: 'kalerab'
-    }
-    // await enrollAdmin()
-    await createUser(user)
-    // await createUser(user)
-    // deleteUser('user_af7e3416ad272b26fafca63790010b04')
-    // enrollAdmin()
+    
 }
 
 main()

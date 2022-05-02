@@ -12,15 +12,17 @@ Installation can be done manualy (if using any other unix system instead of ubun
 1. Open terminal and log in as a root by `sudo su` command.
 2. Clone the repository using `git clone https://github.com/Reydifox/blockchain-school-server`.
 3. Navigate to the root project folder and run `./install.sh` in terminal.
-4. Check if docker is installer by command `docker --version` and `docker-compose --version`
+4. Check if docker is installed by command `docker --version` and `docker-compose --version`.
 
 ## Deploy
 If all the prerequisites are installed, run the following commands to start the ledger and node server.
 1. Type into the console `./startServer.sh` to start the server.
 2. Blockchain platform will be initialized and if no error occured, the node server will start.
-3. The web interface should now be available at localhost:5000
-4. An admin user for the network will be created automatically when starting the server, however at least one other user needs to be created to be able to query the ledger. This is done by navigating to localhost:5000/register and registering via the form.
-NOTE: please make sure ```enroll_admin()``` is not commented out in index.js.
+3. The web interface should now be available at [localhost:5000](localhost:5000)
+4. An admin user for the network will be created automatically when starting the server, however at least one other user needs to be created to be able to query the ledger. This is done by navigating to [localhost:5000/register](localhost:5000/register) and registering via the form.
+::: note
+Please make sure ```enroll_admin()``` is not commented out in index.js.
+:::
 5. Various queries can be run by navigating to different URLs, see available get/post mappings in the web/index.js file
 
 ::: warning

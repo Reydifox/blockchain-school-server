@@ -71,10 +71,9 @@ async function updateEntity(user_id, entity){
         return response
     }
     else if(entity_location === 'ledger'){
-        const entity_id = entity._id
-        delete entity._id
-        const response = await ledger_invoke(user_id, 'putEntity', entity_id, JSON.stringify(entity))
-        return response
+        //TODO: update in ledger
+        console.log("Will be implemented in the future.")
+        return undefined
     }
 }
 

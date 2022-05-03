@@ -157,7 +157,6 @@ async function createUser(user){
             console.log(db_response)
             if(db_response.status == 201){
                 // request accepted
-                // TODO: insert user data into ledger
                 if (user_type === 'faculty_member'){
                     // register user and create a wallet,
                     // if the user is a faculty member
@@ -178,8 +177,25 @@ async function deleteUser(user_id){
     const response = await couch.del(dbname, user._id, user._rev)
     if(response.status == 200){
         // accepted
-        // TODO: remove user from ledger and delete wallet
+        const response = await ledger_invoke(user_id, 'deleteEntity', user_id)
+        // The response in not very useful when using ledger_invoke(),
+        // because the ledger always returns an empty buffer,
+        // regardless if the operation is successful or not.
+        // Might be better to return a manually created response,
+        // created after some kind of check, e.g. if the entity to be deleted exists.
+        const stuff = response.toString()
+        // TODO: delete user's wallet
+
+        return stuff
     }
+}
+
+async function updateUser(user){
+    // TODO
+}
+
+async function getUserSession(){
+    // TODO
 }
 
 
@@ -196,3 +212,5 @@ module.exports.updateEntity = updateEntity
 module.exports.deleteEntity = deleteEntity
 module.exports.createUser = createUser
 module.exports.deleteUser = deleteUser
+module.exports.updateUser = updateUser
+module.exports.getUserSession = getUserSession

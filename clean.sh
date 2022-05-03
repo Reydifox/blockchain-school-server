@@ -8,6 +8,12 @@ rm -rf node_modules
 rm package-lock.json
 sudo npm install
 cd ../config
+rm -rf node_modules
+rm package-lock.json
+sudo npm install
+cd ../test
+rm -rf node_modules
+rm package-lock.json
 sudo npm install
 echo "Cleaning node server build.."
 cd ../../web

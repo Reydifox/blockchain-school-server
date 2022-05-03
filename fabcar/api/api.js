@@ -138,7 +138,6 @@ async function createUser(user){
             let ledger_user_data = {}
             if (user_type === 'student'){
                 ledger_user_data = {
-                    _id: user_id,
                     study_info_id: user.study_info_id,
                     absolvent_status_id: user.absolvent_status_id,
                     bank_account: user.bank_account
@@ -148,7 +147,6 @@ async function createUser(user){
             }
             else {
                 ledger_user_data = {
-                    _id: user_id,
                     secondary_auth_id: user.study_info_id,
                     user_role_id: user.user_role_id
                 }
@@ -166,6 +164,9 @@ async function createUser(user){
                     // students do not have separate wallets
                     await registerUser(user._id)
                 }
+                await ledger_invoke('auth', 'putEntity', user_id, JSON.stringify(ledger_user_data))
+                const response = {successful: true, user_id: user_id}
+                return response
             }
         })
     }

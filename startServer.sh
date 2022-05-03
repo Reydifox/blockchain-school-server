@@ -36,7 +36,7 @@ echo "Setting up DB..."
 cd config
 node setupDb.js
 cd ..
-rm -rf wallet
+rm -rf wallet/*
 cd config
 echo "Setting up API..."
 node setupApi.js

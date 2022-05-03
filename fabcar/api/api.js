@@ -1,3 +1,5 @@
+const fs = require('fs')
+const path = require('path')
 const getEntityLocation = require('../javascript/getEntityLocation')
 const couch = require('../config/couchDbConnection')
 const dbConfig = require('../config/dbConfig')
@@ -6,6 +8,12 @@ const enrollAdmin = require('../javascript/enrollAdmin')
 const ledger_query = require('../javascript/query')
 const ledger_invoke = require('../javascript/invoke')
 const dbname = dbConfig.dbname
+
+
+function removeWallet(user_id) {
+    const full_path = path.resolve(__dirname, '..', 'wallet', user_id) + '.id'
+    fs.unlinkSync(full_path)
+}
 
 
 async function getAllFromDb(entity_name){

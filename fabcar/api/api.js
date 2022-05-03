@@ -155,7 +155,7 @@ async function createUser(user){
             }
             else {
                 ledger_user_data = {
-                    secondary_auth_id: user.study_info_id,
+                    secondary_auth_id: user.secondary_auth_id,
                     user_role_id: user.user_role_id
                 }
                 const {secondary_auth_id, user_role_id, ...temp_data} = user
@@ -192,18 +192,57 @@ async function deleteUser(user_id){
         // Might be better to return a manually created response,
         // created after some kind of check, e.g. if the entity to be deleted exists.
         const stuff = response.toString()
-        // TODO: delete user's wallet
-
+        removeWallet(user_id)
         return stuff
     }
 }
 
 async function updateUser(user){
-    // TODO
+    // user_type is either student or faculty_member
+    
+    const user_id = user._id;
+    const response = await ledger_query('auth', 'getEntity', user_id)
+    
+    // check if given user is a student or a faculty member
+    let db_user_data = {}
+    let ledger_user_data = {}
+    if(response.secondary_auth_id !== "undefined"){
+        // Faculty member
+        ledger_user_data = {
+            secondary_auth_id: user.secondary_auth_id,
+            user_role_id: user.user_role_id
+        }
+        const {secondary_auth_id, user_role_id, ...temp_data} = user
+        db_user_data = temp_data
+    }
+    else {
+        // Student
+        ledger_user_data = {
+            study_info_id: user.study_info_id,
+            absolvent_status_id: user.absolvent_status_id,
+            bank_account: user.bank_account
+        }
+        const {study_info_id, absolvent_status_id, bank_account, ...temp_data} = user
+        db_user_data = temp_data
+    }
+    const db_response = await couch.update(dbname, db_user_data)
+    console.log(db_response)
+    if(db_response.status == 201){
+        // request accepted
+        await ledger_invoke('auth', 'putEntity', user_id, JSON.stringify(ledger_user_data))
+        const response = {successful: true, user_id: user_id}
+        return response
+    }
 }
 
-async function getUserSession(){
-    // TODO
+async function getUserSession(email, password){
+    const response = getAllFromDb('user')
+    response.data.rows.forEach(element => {
+        if(element.value.email === email && element.value.password === password){
+            // TODO create session token?
+            return response
+        }
+    });
 }
 
 
@@ -214,6 +253,7 @@ async function main(){
 
 main()
 
+module.exports.getAllEntities = getAllEntities
 module.exports.getEntity = getEntity
 module.exports.putEntity = putEntity
 module.exports.updateEntity = updateEntity

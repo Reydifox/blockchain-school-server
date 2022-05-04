@@ -252,13 +252,16 @@ async function updateUser(user){
 }
 
 async function getUserSession(email, password){
-    const response = getAllFromDb('user')
+    const response = await getAllFromDb('user')
+    let result = {error: "User not found."}
     response.data.rows.forEach(element => {
         if(element.value.email === email && element.value.password === password){
-            // TODO create session token?
-            return response
+            // delete password field from object
+            result = element.value
+            delete result.password
         }
     });
+    return result
 }
 
 

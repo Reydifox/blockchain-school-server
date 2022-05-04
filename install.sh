@@ -17,6 +17,8 @@ cd ./fabcar/javascript
 sudo npm install
 cd ../config
 sudo npm install
+cd ../test
+sudo npm install
 cd ../../web
 sudo npm install
 sudo npm install bcrypt --unsafe-perms

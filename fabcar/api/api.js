@@ -48,11 +48,26 @@ async function getAllEntities(user_id, entity_name){
 }
 
 
+async function getUserEntity(user_id){
+    const db_user_data = await couch.get(dbname, user_id)
+    const ledger_reponse = await ledger_query('auth', 'getEntity', user_id)
+    const ledger_user_data = JSON.parse(ledger_reponse.toString())
+    const full_user_data = {
+        ...db_user_data.data,
+        ...ledger_user_data
+    }
+    return full_user_data
+}
+
+
 // retrieves a single entity based on its id
 // id example: 'entityname_123456'
 async function getEntity(user_id, entity_id){
     const entity_name = entity_id.split("_")[0]
     const entity_location = getEntityLocation(entity_name)
+    if (entity_name === 'user'){
+        return await getUserEntity(entity_id)
+    }
     if (entity_location === 'db'){
             const result = await couch.get(dbname, entity_id)
             if(result.data){
@@ -201,12 +216,14 @@ async function updateUser(user){
     // user_type is either student or faculty_member
     
     const user_id = user._id;
-    const response = await ledger_query('auth', 'getEntity', user_id)
+    let ledger_response = await ledger_query('auth', 'getEntity', user_id)
+    ledger_response = JSON.parse(ledger_response.toString())
+    console.log(ledger_response)
     
     // check if given user is a student or a faculty member
     let db_user_data = {}
     let ledger_user_data = {}
-    if(response.secondary_auth_id !== "undefined"){
+    if(ledger_response.secondary_auth_id !== undefined){
         // Faculty member
         ledger_user_data = {
             secondary_auth_id: user.secondary_auth_id,
@@ -226,7 +243,6 @@ async function updateUser(user){
         db_user_data = temp_data
     }
     const db_response = await couch.update(dbname, db_user_data)
-    console.log(db_response)
     if(db_response.status == 201){
         // request accepted
         await ledger_invoke('auth', 'putEntity', user_id, JSON.stringify(ledger_user_data))

@@ -10,9 +10,9 @@ rm -rf wallet/*
 cd config
 echo "Setting up API..."
 node setupApi.js
-echo "Running infrastructural tests"
-cd ../test
-npm test
+#echo "Running infrastructural tests"
+#cd ../test
+#npm test
 echo "Starting node server.."
 cd ../../web
 node index.js

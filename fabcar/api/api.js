@@ -86,7 +86,8 @@ async function getEntity(user_id, entity_id){
 
 
 async function updateEntity(user_id, entity){
-    const entity_name = entity._id.split("_")[0]
+    const last_underscore_index = entity_id.lastIndexOf('_')
+    const entity_name = entity_id.slice(0, last_underscore_index)
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
         const response = await couch.update(dbname, entity)
@@ -125,7 +126,8 @@ async function putEntity(user_id, entity){
 
 
 async function deleteEntity(user_id, entity_id){
-    const entity_name = entity_id.split("_")[0]
+    const last_underscore_index = entity_id.lastIndexOf('_')
+    const entity_name = entity_id.slice(0, last_underscore_index)
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
         const result = await getEntity(user_id, entity_id)

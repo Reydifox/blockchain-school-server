@@ -25,7 +25,6 @@ async function main(user_id = 'testuser') {
         // Create a new file system based wallet for managing identities.
         const walletPath = path.resolve(__dirname, '..', 'wallet');
         const wallet = await Wallets.newFileSystemWallet(walletPath);
-        console.log(`Wallet path: ${walletPath}`);
 
         // Check to see if we've already enrolled the user.
         const userIdentity = await wallet.get(user_id);

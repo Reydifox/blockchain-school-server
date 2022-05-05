@@ -87,6 +87,7 @@ async function getEntity(user_id, entity_id){
 
 
 async function updateEntity(user_id, entity){
+    const entity_id = entity._id
     const last_underscore_index = entity_id.lastIndexOf('_')
     const entity_name = entity_id.slice(0, last_underscore_index)
     const entity_location = getEntityLocation(entity_name)

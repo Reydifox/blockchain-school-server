@@ -6,32 +6,6 @@ const dbConfig = require('./dbConfig')
 const dbname = dbConfig.dbname
 
 
-// only used for testing purposes
-const entities = [
-    {
-        _id: "user_1",
-        first_name: "ferko",
-        last_name: "mrkvicka", 
-        email: "ferkomrkvicka@gmail.com"
-    },
-    {
-        _id: "user_2",
-        first_name: "janko",
-        last_name: "hrasko", 
-        email: "jankohrasko@gmail.com"
-    },
-    {
-        _id: "course_1",
-        garant_id: 1, 
-        name: "Algoritmy a datove struktury", 
-        acronym: "ADS", 
-        description: "Algo a DS",
-        trimester: 4,
-        prerequisite_course_id: 0
-    }
-]
-
-
 function insert_doc(doc){
     couch.insert(dbname, doc).then(({data, headers, status}) => {
         console.log(data)
@@ -41,9 +15,6 @@ function insert_doc(doc){
 }
 
 function main(){
-    // uncomment below line to insert a few simple entities into DB
-    // useful for testing purposes
-    entities.forEach(element => insert_doc(element))
 
     config.db.forEach(element => {
         const view_name = `${element}_all`

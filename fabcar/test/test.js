@@ -44,10 +44,10 @@ const course_result_entities = [
     }
 ];
 
-describe('Infrastructure API', function () {
+describe('Infrastructure API tests', function () {
     
     describe('putEntity', function () {
-        it('should return true when returned entity array size is not 0', async function () {
+        it('should put entities into the persistance', async function () {
             for(let entity of course_result_entities){
                 await api.putEntity('admin', entity);
             }
@@ -57,14 +57,14 @@ describe('Infrastructure API', function () {
     });
 
     describe('getAllEntities', function () {
-        it('should return true when all the created entities match the received list', async function () {
+        it('should get all the entities put in the persistance', async function () {
             const received_ents = await api.getAllEntities('admin', 'course_result');
             assert.equal(received_ents.result.length, course_result_entities.length);
         });
     });
 
     describe('getEntity', function () {
-        it('should return true when the entities match', async function () {
+        it('should get a certain entity', async function () {
             const received_ents = await api.getAllEntities('admin', 'course_result');
             const ent = await api.getEntity('admin', received_ents.result[2]._id);
             assert.equal(ent.student_id, received_ents.result[2].student_id);
@@ -72,20 +72,22 @@ describe('Infrastructure API', function () {
     });
 
     describe('updateEntity', function () {
-        it('should return true when the entity has been updated', async function () {
+        it('should update a certain entity data', async function () {
             const received_ents = await api.getAllEntities('admin', 'course_result');
 
             let ent = await api.getEntity('admin', received_ents.result[0]._id);
-            ent.student_id = course_result_entities[0].student_id;
-            api.updateEntity('admin', ent);
+            // retrieve original entity based on the student id of the retrieved entity
+            const original_ent = course_result_entities.filter(elem => elem.student_id === ent.student_id)[0]
+            ent.student_id = 'user_123456';
+            await api.updateEntity('admin', ent);
     
             const new_ent = await api.getEntity('admin', received_ents.result[0]._id);
-            assert.equal(new_ent.student_id, course_result_entities[0].student_id);
+            assert.notEqual(new_ent.student_id, original_ent.student_id);
         });
     });
 
     describe('deleteEntity', function () {
-        it('should return true when the entity was deleted', async function () {
+        it('should delete all the entities put in the persistance', async function () {
             const all_ents = await api.getAllEntities('admin', 'course_result');
             for(let entity of all_ents.result){
                 await api.deleteEntity('admin', entity._id);
@@ -97,17 +99,17 @@ describe('Infrastructure API', function () {
     });
 
     describe('createUser', function () {
-        it('should return true when all the created entities match the received list', async function () {
+        it('should create new users', async function () {
             for(let entity of user_entities){
                 await api.createUser(entity);
             }
             const users = await api.getAllEntities('admin', 'user');
-            assert.equal(users.result.length, user_entities.length); // created two users on init
+            assert.equal(users.result.length, user_entities.length);
         });
     });
 
     describe('updateUser', function () {
-        it('should return true when the user have been updated', async function () {
+        it('should update a certain user data', async function () {
             const users = await api.getAllEntities('admin', 'user');
             let user_0_id = users.result[0]._id;
 
@@ -123,14 +125,14 @@ describe('Infrastructure API', function () {
     });
 
     describe('getUserSession', function () {
-        it('should return -1 when the value is not present', async function () {
+        it('should get user session on successful login', async function () {
             const user = await api.getUserSession(user_entities[0].email, user_entities[0].password);
             assert.equal(user.email, user_entities[0].email);
         });
     });
 
     describe('deleteUser', function () {
-        it('should return true when the user was deleted', async function () {
+        it('should delete all the users put in the persistance', async function () {
             const all_ents = await api.getAllEntities('admin', 'user');
             for(let entity of all_ents.result){
                 await api.deleteEntity('admin', entity._id);

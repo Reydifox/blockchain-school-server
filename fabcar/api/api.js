@@ -109,19 +109,18 @@ async function putEntity(user_id, entity){
     // entity.entity_name is not needed
     delete entity.entity_name
     const entity_location = getEntityLocation(entity_name)
-    couch.uniqid().then(async ids => {
-        const generated_id = ids[0]
-        const full_id = entity_name + '_' + generated_id
-        let response = {}
-        if(entity_location === 'db'){
-            entity._id = full_id
-            response = await couch.insert(dbname, entity)
-        }
-        else if(entity_location === 'ledger'){
-            response = await ledger_invoke(user_id, 'putEntity', full_id, JSON.stringify(entity))
-        }
+    const ids = await couch.uniqid()
+    const generated_id = ids[0]
+    const full_id = entity_name + '_' + generated_id
+    if(entity_location === 'db'){
+        entity._id = full_id
+        const response = await couch.insert(dbname, entity)
         return response
-    })
+    }
+    else if(entity_location === 'ledger'){
+        const response = await ledger_invoke(user_id, 'putEntity', full_id, JSON.stringify(entity))
+        return response.toString()
+    }
 }
 
 

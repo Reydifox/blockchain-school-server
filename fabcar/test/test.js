@@ -79,7 +79,7 @@ describe('Infrastructure API', function () {
             ent.student_id = course_result_entities[0].student_id;
             api.updateEntity('admin', ent);
     
-            const new_ent = await api.getEntity('admin', course_result_0_id);
+            const new_ent = await api.getEntity('admin', received_ents.result[0]._id);
             assert.equal(new_ent.student_id, course_result_entities[0].student_id);
         });
     });
@@ -102,7 +102,7 @@ describe('Infrastructure API', function () {
                 await api.createUser(entity);
             }
             const users = await api.getAllEntities('admin', 'user');
-            assert.equal(users.result.length, user_entities.length + 2); // created two users on init
+            assert.equal(users.result.length, user_entities.length); // created two users on init
         });
     });
 
@@ -112,11 +112,13 @@ describe('Infrastructure API', function () {
             let user_0_id = users.result[0]._id;
 
             let ent = await api.getEntity('admin', user_0_id);
+            // retrieve original entity based on the first name of the retrieved entity
+            const original_ent = user_entities.filter(elem => elem.first_name === ent.first_name)[0]
             ent.first_name = 'Abdul';
-            api.updateUser('admin', ent);
+            await api.updateUser(ent);
 
             const new_ent = await api.getEntity('admin', user_0_id);
-            assert.equal(new_ent.result.first_name, user_entities[0].first_name);
+            assert.notEqual(new_ent.first_name, original_ent.first_name);
         });
     });
 

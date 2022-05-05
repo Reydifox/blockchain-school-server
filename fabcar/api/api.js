@@ -63,7 +63,8 @@ async function getUserEntity(user_id){
 // retrieves a single entity based on its id
 // id example: 'entityname_123456'
 async function getEntity(user_id, entity_id){
-    const entity_name = entity_id.split("_")[0]
+    const last_underscore_index = entity_id.lastIndexOf('_')
+    const entity_name = entity_id.slice(0, last_underscore_index)
     const entity_location = getEntityLocation(entity_name)
     if (entity_name === 'user'){
         return await getUserEntity(entity_id)
@@ -86,11 +87,12 @@ async function getEntity(user_id, entity_id){
 
 
 async function updateEntity(user_id, entity){
-    const entity_name = entity._id.split("_")[0]
+    const entity_id = entity._id
+    const last_underscore_index = entity_id.lastIndexOf('_')
+    const entity_name = entity_id.slice(0, last_underscore_index)
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
         const response = await couch.update(dbname, entity)
-        // console.log(response)
         return response
     }
     else if(entity_location === 'ledger'){
@@ -108,30 +110,29 @@ async function putEntity(user_id, entity){
     // entity.entity_name is not needed
     delete entity.entity_name
     const entity_location = getEntityLocation(entity_name)
-    couch.uniqid().then(async ids => {
-        const generated_id = ids[0]
-        const full_id = entity_name + '_' + generated_id
-        let response = {}
-        if(entity_location === 'db'){
-            entity._id = full_id
-            response = await couch.insert(dbname, entity)
-        }
-        else if(entity_location === 'ledger'){
-            response = await ledger_invoke(user_id, 'putEntity', full_id, JSON.stringify(entity))
-        }
+    const ids = await couch.uniqid()
+    const generated_id = ids[0]
+    const full_id = entity_name + '_' + generated_id
+    if(entity_location === 'db'){
+        entity._id = full_id
+        const response = await couch.insert(dbname, entity)
         return response
-    })
+    }
+    else if(entity_location === 'ledger'){
+        const response = await ledger_invoke(user_id, 'putEntity', full_id, JSON.stringify(entity))
+        return response.toString()
+    }
 }
 
 
 async function deleteEntity(user_id, entity_id){
-    const entity_name = entity_id.split("_")[0]
+    const last_underscore_index = entity_id.lastIndexOf('_')
+    const entity_name = entity_id.slice(0, last_underscore_index)
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
         const result = await getEntity(user_id, entity_id)
         if (result){
             const response = await couch.del(dbname, result._id, result._rev)
-            //console.log(response)
             return response
         }
     }
@@ -153,62 +154,62 @@ async function createUser(user){
     const user_type = user.user_type
     delete user.user_type
     if (user_type === 'student' || user_type === 'faculty_member'){
-        couch.uniqid().then(async ids => {
-            const generated_id = ids[0]
-            const user_id = 'user_' + generated_id
-            user._id = user_id
-            let db_user_data = {}
-            let ledger_user_data = {}
-            if (user_type === 'student'){
-                ledger_user_data = {
-                    study_info_id: user.study_info_id,
-                    absolvent_status_id: user.absolvent_status_id,
-                    bank_account: user.bank_account
-                }
-                const {study_info_id, absolvent_status_id, bank_account, ...temp_data} = user
-                db_user_data = temp_data
+        const ids = await couch.uniqid()
+        const generated_id = ids[0]
+        const user_id = 'user_' + generated_id
+        user._id = user_id
+        let db_user_data = {}
+        let ledger_user_data = {}
+        if (user_type === 'student'){
+            ledger_user_data = {
+                study_info_id: user.study_info_id,
+                absolvent_status_id: user.absolvent_status_id,
+                bank_account: user.bank_account
             }
-            else {
-                ledger_user_data = {
-                    secondary_auth_id: user.secondary_auth_id,
-                    user_role_id: user.user_role_id
-                }
-                const {secondary_auth_id, user_role_id, ...temp_data} = user
-                db_user_data = temp_data
+            const {study_info_id, absolvent_status_id, bank_account, ...temp_data} = user
+            db_user_data = temp_data
+        }
+        else {
+            ledger_user_data = {
+                secondary_auth_id: user.secondary_auth_id,
+                user_role_id: user.user_role_id
             }
-            const db_response = await couch.insert(dbname, db_user_data)
-            console.log(db_response)
-            if(db_response.status == 201){
-                // request accepted
-                if (user_type === 'faculty_member'){
-                    // register user and create a wallet,
-                    // if the user is a faculty member
-                    // students do not have separate wallets
-                    await registerUser(user._id)
-                }
-                await ledger_invoke('auth', 'putEntity', user_id, JSON.stringify(ledger_user_data))
-                const response = {successful: true, user_id: user_id}
-                return response
+            const {secondary_auth_id, user_role_id, ...temp_data} = user
+            db_user_data = temp_data
+        }
+        const db_response = await couch.insert(dbname, db_user_data)
+        if(db_response.status == 201){
+            // request accepted
+            if (user_type === 'faculty_member'){
+                // register user and create a wallet,
+                // if the user is a faculty member
+                // students do not have separate wallets
+                await registerUser(user._id)
             }
-        })
+            await ledger_invoke('auth', 'putEntity', user_id, JSON.stringify(ledger_user_data))
+            const response = {successful: true, user_id: user_id}
+            return response
+        }
+
     }
 }
 
 
 async function deleteUser(user_id){
-    const user = await getEntity(user_id)
+    const user = await getEntity('admin', user_id)
     const response = await couch.del(dbname, user._id, user._rev)
     if(response.status == 200){
         // accepted
-        const response = await ledger_invoke(user_id, 'deleteEntity', user_id)
+        const response = await ledger_invoke('auth', 'deleteEntity', user_id)
         // The response in not very useful when using ledger_invoke(),
         // because the ledger always returns an empty buffer,
         // regardless if the operation is successful or not.
         // Might be better to return a manually created response,
         // created after some kind of check, e.g. if the entity to be deleted exists.
-        const stuff = response.toString()
-        removeWallet(user_id)
-        return stuff
+        if (user.user_type === 'faculty_member'){
+            removeWallet(user_id)
+        }
+        return response
     }
 }
 
@@ -216,9 +217,8 @@ async function updateUser(user){
     // user_type is either student or faculty_member
     
     const user_id = user._id;
-    let ledger_response = await ledger_query('auth', 'getEntity', user_id)
-    ledger_response = JSON.parse(ledger_response.toString())
-    console.log(ledger_response)
+    let ledger_response_raw = await ledger_query('auth', 'getEntity', user_id)
+    let ledger_response = JSON.parse(ledger_response_raw.toString())
     
     // check if given user is a student or a faculty member
     let db_user_data = {}

@@ -67,7 +67,7 @@ router.post('/:id/lecturer', async (req, res) => {
   res.json(req.body)
 })
 
-router.post(':id/file', async (req, res) => {
+router.post('/:id/file', async (req, res) => {
   res.send('1')
 })
 

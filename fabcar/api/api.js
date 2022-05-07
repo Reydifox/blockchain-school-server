@@ -152,7 +152,6 @@ async function deleteEntity(user_id, entity_id){
 async function createUser(user){
     // user_type is either student or faculty_member
     const user_type = user.user_type
-    delete user.user_type
     if (user_type === 'student' || user_type === 'faculty_member'){
         const ids = await couch.uniqid()
         const generated_id = ids[0]

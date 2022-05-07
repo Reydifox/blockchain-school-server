@@ -16,7 +16,6 @@ const student_placeholder = {
 router.route('/')
     .get( async (req, res) => {
         let result  = await student.getAllStudents(req)
-        console.log(result)
         res.json(result)
 
     })
@@ -27,16 +26,25 @@ router.route('/')
 
 router.route('/:id')
     .get( async (req, res) => {
-        let result = await student.getStudentById(req)
-        res.json(student_placeholder)
+        try {
+            let result = await student.getStudentById(req)
+            res.json(result)
+        } catch (e) {
+            res.json(e)
+        }
     })
     // TODO - edit studenta
     .put( async (req, res) => {
-        res.json(req.body)
+        let result = await student.updateStudent(req)
+        res.json(result)
     })
-    // TODO - delete studenta
     .delete( async (req, res) => {
-        res.sendStatus(204)
+        try {
+            let result = await student.deleteStudent(req)
+            res.statusCode(204)
+        } catch (e) {
+            res.json(e)
+        }
     })
 
 router.get('/programme/:program_id', async (req, res) => {

@@ -5,8 +5,9 @@ module.exports = {
   getAllStudents: async function (req) {
     let users  = await infrastructure.getAllEntities(auth.get_bearer(req),'user')
     let output = []
+    console.log(users)
     users.result.forEach(user => { 
-      if (user.entity_type == 'student') {
+      if (user.user_type == 'student') {
         output.push(user)
       }
     });
@@ -22,17 +23,23 @@ module.exports = {
   },
   addStudent: async function (req) {
     student = {
-      entity_name: "user",
-      entity_type: "student",
+      user_type: "student",
       first_name : req.body.first_name,
       last_name : req.body.last_name,
       email : req.body.email,
       academic_degree : req.body.academic_degree,
       private_email : req.body.private_email,
+      address_id: undefined
   }
-    let result = await infrastructure.putEntity(auth.get_bearer(req),student)
-    console.log(result)
-    student.id = result.data._id
+    let result = await infrastructure.createUser(student)
     return student
+  },
+  updateStudent: async function (req) {
+    let result = await infrastructure.updateUser(req.body)
+    return result
+  },
+  deleteStudent: async function (req) {
+    let result = await infrastructure.deleteUser(req.params.id)
+    return result
   }
 };

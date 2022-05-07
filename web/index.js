@@ -14,6 +14,7 @@ const register_func = require('../fabcar/javascript/registerUser.js');
 const enroll_admin = require('../fabcar/javascript/enrollAdmin.js');
 
 const app = express();
+app.use(cors())
 app.use(express.urlencoded());
 app.use(express.json());
 
@@ -92,7 +93,6 @@ app.use('/roles', roles)
 app.use('/users', users)
 app.use('/results', results)
 app.use('/courses', courses)
-
 
 
 const PORT = process.env.PORT || 5000;

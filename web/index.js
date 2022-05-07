@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 
 // for password hashing, will use when in employee registration is implemented
@@ -82,7 +83,7 @@ const roles = require('./Routes/roles')
 const users = require('./Routes/users')
 const results = require('./Routes/results')
 const courses = require('./Routes/courses')
-
+const initializeData = require('./initialData')
 
 app.use('/students', students)
 app.use('/programme', programme)
@@ -94,21 +95,7 @@ app.use('/courses', courses)
 
 
 
-app.get('/request', async (req, res) => {
-    console.log(req.headers.authorization)
-    res.send(0)
-})
-/*
-app.get('/:username/students', async (req, res) => {
-    let result = await student.getAllStudents(req)
-    res.send(result.toString())
-})
-
-app.get('/:username/students/:id', async (req, res) => {
-    let result = await student.getStudentById(req)
-    res.send(result.toString());
-})
-*/
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Web server started on port ${PORT}`));
+initializeData.initializeData()

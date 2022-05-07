@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
+const https = require('http');
 
 // for password hashing, will use when in employee registration is implemented
 const bcrypt = require('bcrypt');
@@ -97,4 +98,6 @@ app.use('/courses', courses)
 
 
 const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => console.log(`Web server started on port ${PORT}`));
 initializeData.initializeData()

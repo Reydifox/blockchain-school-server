@@ -21,4 +21,5 @@ rm -rf node_modules
 rm package-lock.json
 sudo npm install bcrypt --unsafe-perms
 sudo npm install
+sudo npm install --save cors
 echo "Done"

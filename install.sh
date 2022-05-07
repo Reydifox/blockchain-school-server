@@ -22,6 +22,7 @@ sudo npm install
 cd ../../web
 sudo npm install
 sudo npm install bcrypt --unsafe-perms
+sudo npm install --save cors
 echo "Downloading Hyperledger Fabric.."
 cd ../../
 curl -sSL https://bit.ly/2ysbOFE | bash -s

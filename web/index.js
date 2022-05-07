@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
-const https = require('http');
 
 // for password hashing, will use when in employee registration is implemented
 const bcrypt = require('bcrypt');
@@ -98,23 +97,4 @@ app.use('/courses', courses)
 
 
 const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => console.log(`Web server started on port ${PORT}`));
-https.get('http://ais.reydifox.eu:5000/students', (resp) => {
-  console.log(resp)
-   /* let data = '';
-
-  // A chunk of data has been received.
-  resp.on('data', (chunk) => {
-    data += chunk;
-  });
-
-  // The whole response has been received. Print out the result.
-  resp.on('end', () => {
-    console.log(JSON.parse(data).explanation);
-  });*/
-
-}).on("error", (err) => {
-  console.log("Error: " + err.message);
-});
 initializeData.initializeData()

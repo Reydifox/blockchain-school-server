@@ -2,8 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
-const https = require('http');
-
 // for password hashing, will use when in employee registration is implemented
 const bcrypt = require('bcrypt');
 

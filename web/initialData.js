@@ -47,9 +47,8 @@ async function initializeData() {
     address4 = await getLatestID('address')
     console.log(address4)
 
-    student1 = await infrastructure.putEntity('admin',{
-        entity_name: "user",
-        entity_type: "student",
+    student1 = await infrastructure.createUser({
+        user_type: "student",
         first_name: "Marek",
         last_name: "Drab",
         email:"xdrabm@stuba.sk",
@@ -60,9 +59,8 @@ async function initializeData() {
     })
     console.log(student1)
 
-    student2 = await infrastructure.putEntity('admin',{
-        entity_name: "user",
-        entity_type: "student",
+    student2 = await infrastructure.createUser({
+        user_type: "student",
         first_name: "Marek",
         last_name: "Lunter",
         email:"xlunter@stuba.sk",
@@ -72,9 +70,8 @@ async function initializeData() {
         address_id: address2._id
     })
     console.log(student2)
-    faculty_member1 = await infrastructure.putEntity('admin',{
-        entity_name: "user",
-        entity_type: "faculty_member",
+    faculty_member1 = await infrastructure.createUser({
+        user_type: "faculty_member",
         first_name: "Andrej",
         last_name: "Hronec",
         email:"xhronec@mail.sk",
@@ -85,9 +82,8 @@ async function initializeData() {
     })
     console.log(faculty_member1)
 
-    faculty_member2 = await infrastructure.putEntity('admin',{
-        entity_name: "user",
-        entity_type: "faculty_member",
+    faculty_member2 = await infrastructure.createUser({
+        user_type: "faculty_member",
         first_name: "Jozef",
         last_name: "Kralik",
         email:"xkralik@stuba.sk",

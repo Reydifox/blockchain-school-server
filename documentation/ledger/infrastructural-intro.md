@@ -52,3 +52,17 @@ The following list describes the permanent location of the entities. However, co
 #### <i class="fa fa-warning"></i> Caution
 If you are trying to query `student` or `faculty_member`, do not use it as a `entity_name` parameter. You should call the getter function just with `user` as a `entity_name` parameter. Then you will need to filter the proper entity type.
 :::
+
+## Persistance
+The project persistance stucture consist of a NonSQL database (CouchDB) and blockchain network (using hyperledger fabric framework). We are able to read and write from/into the persistance. Location of the web service, can be found in the following links:
++ Web address
+    
+    + [CouchDB](http://localhost:5984/_utils/)
+    + [Ledger](http://localhost:5984/_utils/#database/mychannel_fabcar/_all_docs)
+
+Login details, are the same for both types of persistance, since they are running on the same web service. Login details can be found in the following list:
+
++ Login details
+    
+    + name: `admin`
+    + password: `adminpw`

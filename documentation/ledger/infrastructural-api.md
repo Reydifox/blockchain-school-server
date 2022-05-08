@@ -210,16 +210,55 @@ Please make sure, to send user object with property `user_type`. Possible values
 :::
 + Parameters
     + user: `object` (JSON) - Create new User by Entity object
++ Response 200 (application/json)
+
+    + Headers
+
+            X-Request-ID: f72fc914
+            X-Response-Time: 4ms
+
+    + Body
+
+            { 
+                successful: true, 
+                user_id: 'user_63c307e5713ca1b2e05c79ea40004806' 
+            }
 
 ### updateUser [PUT /-> udpateUser(user)]
-Method will update existing entity. Param `user` is updated JSON object of entity. Method will find by a given object's ID and if exist, entity in persistance will be updated. Otherwise error will be given.
+Method will update existing entity. Param `user` is updated JSON object of entity. Method will find by a given object's ID and if exist, entity in persistance will be updated. Otherwise exception will be given.
 + Parameters
     + user: `object` (JSON) - Update Entity by Entity object
++ Response 200 (application/json)
+
+    + Headers
+
+            X-Request-ID: f72fc914
+            X-Response-Time: 4ms
+
+    + Body
+    
+            { 
+                successful: true, 
+                user_id: 'user_63c307e5713ca1b2e05c79ea40004806' 
+            }
 
 ### deleteUser [DELETE /-> deleteUser(user_id)]
-Method will delete existing user entity from the persistance. Method will find by a given ID and if exist, entity in persistance will be deleted. Otherwise error will be given.
+Method will delete existing user entity from the persistance. Method will find by a given ID and if exist, entity in persistance will be deleted. Otherwise exception will be given.
 + Parameters
     + user_id: `user-474g7asg4d5h46473ghfd2` (string) - Delete by User ID
++ Response 200 (application/json)
+
+    + Headers
+
+            X-Request-ID: f72fc914
+            X-Response-Time: 4ms
+
+    + Body
+    
+            { 
+                successful: true, 
+                user_id: 'user_63c307e5713ca1b2e05c79ea40004806' 
+            }
 
 ### getUserSession [GET /-> getUserSession(email, password)]
 This method should be used while users logging and will return JSON object of a user on success.
@@ -229,4 +268,24 @@ Please make sure, to send hashed password. This method will only check if the gi
 + Parameters
     + email: `ferino@stuba.sk` (string) - User's email
     + password: `jnldsafsaf46sda8f46as8df468asf` (string) - User's hashed password
++ Response 200 (application/json)
+
+    + Headers
+
+            X-Request-ID: f72fc914
+            X-Response-Time: 4ms
+
+    + Body
+    
+            {
+                _id: 'user_63c307e5713ca1b2e05c79ea4000a009',
+                _rev: '1-93e028f1a56e4282ad59d14c4a394418',
+                user_type: 'student',
+                first_name: 'Juraj',
+                last_name: 'Janosik',
+                email: 'jurajjanosik@ais.sk',
+                unique_id: 'uniqid',
+                private_email: 'jurajjanosik@koliba.sk',
+                address_id: 1
+            }
 

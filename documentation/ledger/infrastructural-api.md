@@ -211,6 +211,11 @@ Please make sure, to send user object with property `user_type`. Possible values
 + Parameters
     + user: `object` (JSON) - Create new User by Entity object
 
+### updateUser [PUT /-> udpateUser(user)]
+Method will update existing entity. Param `user` is updated JSON object of entity. Method will find by a given object's ID and if exist, entity in persistance will be updated. Otherwise error will be given.
++ Parameters
+    + user: `object` (JSON) - Update Entity by Entity object
+
 ### deleteUser [DELETE /-> deleteUser(user_id)]
 Method will delete existing user entity from the persistance. Method will find by a given ID and if exist, entity in persistance will be deleted. Otherwise error will be given.
 + Parameters

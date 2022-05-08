@@ -257,7 +257,7 @@ async function getUserSession(email, password){
     response.data.rows.forEach(element => {
         if(element.value.email === email && element.value.password === password){
             // delete password field from object
-            result = element.value
+            result = getUserEntity(element.value._id)
             delete result.password
         }
     });

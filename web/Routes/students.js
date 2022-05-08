@@ -2,40 +2,49 @@ const express = require('express')
 const router = express.Router()
 const student = require('../Models/student')
 const auth = require('../Auth/auth')
+const infrastructure = require('../../fabcar/api/api.js');
 const student_placeholder = {
-    id : 1,
-    first_name : "Meno",
-    last_name : "Priezvisko",
-    study_programme : "API",
-    study_form : "denna",
-    study_type : "B",
-    study_field : "MSUS"
+    entity_name: "user",
+    entity_type: "faculty_member",
+    first_name : "Marek",
+  last_name : "Drab",
+  email : "xdrabm@stuba.sk",
+  academic_degree : "Bc.",
+  private_email : "marek.drab@gmail.com",
 }
 
 router.route('/')
     .get( async (req, res) => {
-        //let result = await student.getAllStudents(req)
-        //res.send(result.toString())
-        res.json([student_placeholder, student_placeholder])
+        let result  = await student.getAllStudents(req)
+        res.json(result)
+
     })
-    // TODO - pridanie studenta
     .post( async (req, res) => {
-       res.json(req.body)
+       let result = await student.addStudent(req)
+       res.json(result)
     })
 
 router.route('/:id')
     .get( async (req, res) => {
-        //let result = await student.getStudentById(req)
-        //res.send(result.toString())
-        res.json(student_placeholder)
+        try {
+            let result = await student.getStudentById(req)
+            res.json(result)
+        } catch (e) {
+            res.json(e)
+        }
     })
     // TODO - edit studenta
     .put( async (req, res) => {
-        res.json(req.body)
+        let result = await student.updateStudent(req)
+        res.json(result)
     })
-    // TODO - delete studenta
     .delete( async (req, res) => {
-        res.sendStatus(204)
+        try {
+            let result = await student.deleteStudent(req)
+            res.statusCode(204)
+        } catch (e) {
+            res.json(e)
+        }
     })
 
 router.get('/programme/:program_id', async (req, res) => {

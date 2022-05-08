@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const https = require('https')
+const fs = require('fs')
 
 // for password hashing, will use when in employee registration is implemented
 const bcrypt = require('bcrypt');
@@ -14,11 +16,10 @@ const register_func = require('../fabcar/javascript/registerUser.js');
 const enroll_admin = require('../fabcar/javascript/enrollAdmin.js');
 
 const app = express();
+
 app.use(cors())
 app.use(express.urlencoded());
 app.use(express.json());
-
-//const student = require('./Models/student')
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'))
@@ -97,5 +98,9 @@ app.use('/courses', courses)
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Web server started on port ${PORT}`));
+https.createServer({
+    key: fs.readFileSync('../../key.pem'),
+    cert: fs.readFileSync('../../cert.pem')
+},app).listen(PORT, () => console.log(`Web server started on port ${PORT}`));
+//app.listen(PORT, () => console.log(`Web server started on port ${PORT}`));
 initializeData.initializeData()

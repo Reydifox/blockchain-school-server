@@ -1,0 +1,41 @@
+const auth = require('../Auth/auth')
+const infrastructure = require('../../fabcar/api/api.js');
+const helpers = require('../Helpers/helpers');
+
+module.exports = {
+    getUserById: async function (req) {
+        let user = await infrastructure.getEntity(auth.get_bearer(req), req.params.id)
+        if ('address_id' in user) {
+            let address = await helpers.getAddress(user.address_id)
+            user.address = address
+        }
+        return user
+    },
+    deleteUser: async function (req) {
+        let result = await infrastructure.deleteUser(req.params.id)
+        return result
+    },
+    addUser: async function (req) {
+        let address = req.body.address
+        let result_address = await helpers.putAddress(address)
+        let user = {
+            user_type: req.body.user_type,
+            first_name : req.body.first_name,
+            last_name : req.body.last_name,
+            email : req.body.email,
+            academic_degree : req.body.academic_degree,
+            private_email : req.body.private_email,
+            address_id: result_address.id
+        }
+        let result = await infrastructure.createUser(user)
+        return result
+    },
+    getAllUsers: async function (req) {
+        let users  = await infrastructure.getAllEntities(auth.get_bearer(req),'user')
+        return users.result
+    },
+    updateUser: async function (req) {
+        let result = await infrastructure.updateUser(req.body)
+        return result
+      },
+}

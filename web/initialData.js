@@ -97,7 +97,7 @@ async function initializeData() {
     })
     console.log(faculty_member2)
 
-    course = await infrastructure.putEntity('admin', {
+    course1 = await infrastructure.putEntity('admin', {
         entity_name:"course",
         garant_id: undefined,
         name: "Progamovanie 1",
@@ -106,7 +106,40 @@ async function initializeData() {
         trimester: undefined,
         prerequisite_course_id: undefined
     })
-    console.log(course)
+    console.log(course1)
+
+    course2 = await infrastructure.putEntity('admin', {
+        entity_name:"course",
+        garant_id: undefined,
+        name: "Progamovanie 2",
+        acronym: "PROG-2",
+        descriptiom: "prog2 desc",
+        trimester: undefined,
+        prerequisite_course_id: undefined
+    })
+    console.log(course2)
+
+    course3 = await infrastructure.putEntity('admin', {
+        entity_name:"course",
+        garant_id: undefined,
+        name: "Programovacie Techniky",
+        acronym: "PT",
+        descriptiom: "PT desc",
+        trimester: undefined,
+        prerequisite_course_id: undefined
+    })
+    console.log(course3)
+
+    course4 = await infrastructure.putEntity('admin', {
+        entity_name:"course",
+        garant_id: undefined,
+        name: "Logika",
+        acronym: "LOG",
+        descriptiom: "log desc",
+        trimester: undefined,
+        prerequisite_course_id: undefined
+    })
+    console.log(course4)
     
     programme = await infrastructure.putEntity('admin', {
         entity_name:"study_programme",

@@ -34,15 +34,14 @@ router.route('/')
     let result  = await course.getAllCourses(req)
     res.json(result)
   })
-  // .get(async (req, res) => {
-  //   res.json([course1, course1])
-  // })
   .post(async (req, res) => {
-    res.json(req.body)
+    let result  = await course.addCourse(req)
+    res.json(result)
   })
 router.route('/:id')
   .get(async (req, res) => {
-    res.json(course_detail)
+    let result  = await course.getCourseById(req)
+    res.json(result)
   })
   .put(async (req, res) => {
     res.json(req.body)

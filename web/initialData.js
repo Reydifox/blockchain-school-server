@@ -1,12 +1,15 @@
 const infrastructure = require('../fabcar/api/api.js');
-
-async function getLatestID(entity_name) {
-   let result = await infrastructure.getAllEntities('admin', entity_name)
-   return result.result[result.result.length-1]
-}
+const helpers = require('./Helpers/helpers')
 
 async function initializeData() {
-    address1 = await infrastructure.putEntity('student', {
+    address1 = await helpers.putAddress({
+        street: "Sturova",
+        house_number: "384/4",
+        city: "Stara Lubovna",
+        postal_code: "06401",
+        county: "Slovensko",
+    })
+    address12 = await infrastructure.putEntity('student', {
         street: "Sturova",
         house_number: "384/4",
         city: "Stara Lubovna",
@@ -14,7 +17,7 @@ async function initializeData() {
         county: "Slovensko",
         entity_name:"address"
     })
-    address1 = await getLatestID('address')
+    address1 = await helpers.getLatestID('address')
     console.log(address1)
     address2 = await infrastructure.putEntity('admin', {
         street: "Kukucinova",
@@ -24,7 +27,7 @@ async function initializeData() {
         county: "Slovensko",
         entity_name:"address"
     })
-    address2 = await getLatestID('address')
+    address2 = await helpers.getLatestID('address')
     console.log(address2)
     address3 = await infrastructure.putEntity('admin', {
         street: "Sturova",
@@ -34,7 +37,7 @@ async function initializeData() {
         county: "Slovensko",
         entity_name:"address"
     })
-    address3 = await getLatestID('address')
+    address3 = await helpers.getLatestID('address')
     console.log(address3)
     address4 = await infrastructure.putEntity('admin', {
         street: "Kukucinova",
@@ -44,7 +47,7 @@ async function initializeData() {
         county: "Slovensko",
         entity_name:"address"
     })
-    address4 = await getLatestID('address')
+    address4 = await helpers.getLatestID('address')
     console.log(address4)
 
     student1 = await infrastructure.createUser({
@@ -94,7 +97,7 @@ async function initializeData() {
     })
     console.log(faculty_member2)
 
-    course = await infrastructure.putEntity('admin', {
+    course1 = await infrastructure.putEntity('admin', {
         entity_name:"course",
         garant_id: undefined,
         name: "Progamovanie 1",
@@ -103,7 +106,40 @@ async function initializeData() {
         trimester: undefined,
         prerequisite_course_id: undefined
     })
-    console.log(course)
+    console.log(course1)
+
+    course2 = await infrastructure.putEntity('admin', {
+        entity_name:"course",
+        garant_id: undefined,
+        name: "Progamovanie 2",
+        acronym: "PROG-2",
+        descriptiom: "prog2 desc",
+        trimester: undefined,
+        prerequisite_course_id: undefined
+    })
+    console.log(course2)
+
+    course3 = await infrastructure.putEntity('admin', {
+        entity_name:"course",
+        garant_id: undefined,
+        name: "Programovacie Techniky",
+        acronym: "PT",
+        descriptiom: "PT desc",
+        trimester: undefined,
+        prerequisite_course_id: undefined
+    })
+    console.log(course3)
+
+    course4 = await infrastructure.putEntity('admin', {
+        entity_name:"course",
+        garant_id: undefined,
+        name: "Logika",
+        acronym: "LOG",
+        descriptiom: "log desc",
+        trimester: undefined,
+        prerequisite_course_id: undefined
+    })
+    console.log(course4)
     
     programme = await infrastructure.putEntity('admin', {
         entity_name:"study_programme",

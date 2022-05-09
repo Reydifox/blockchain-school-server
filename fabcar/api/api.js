@@ -197,7 +197,7 @@ async function createUser(user){
 async function deleteUser(user_id){
     const user = await getEntity('admin', user_id)
     const response = await couch.del(dbname, user._id, user._rev)
-    if(response.status == 200){
+    if(response.status == 200 || response.status == 201){
         // accepted
         const response = await ledger_invoke('auth', 'deleteEntity', user_id)
         // The response in not very useful when using ledger_invoke(),
@@ -208,8 +208,9 @@ async function deleteUser(user_id){
         if (user.user_type === 'faculty_member'){
             removeWallet(user_id)
         }
-        return response
+        return {successful: true, user_id: user_id}
     }
+    return {successful: false, msg: `Error occurred when deleting user from DB, status code ${response.status}`}
 }
 
 async function updateUser(user){
@@ -256,7 +257,7 @@ async function getUserSession(email, password){
     response.data.rows.forEach(element => {
         if(element.value.email === email && element.value.password === password){
             // delete password field from object
-            result = element.value
+            result = getUserEntity(element.value._id)
             delete result.password
         }
     });

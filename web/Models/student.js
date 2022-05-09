@@ -18,13 +18,12 @@ module.exports = {
     return 0
   },
   addStudent: async function (req) {
-    let address_id = undefined
     if ('address' in req.body) {
       let address = req.body.address
-      console.log(address)
-      //let result_address = await helpers.putAddress(address)
-      //console.log(result_address)
-      //address_id = result_address._id
+      let result_address = await helpers.putAddress(address)
+      let address_id = result_address._id
+    } else { 
+      let address_id = undefined
     }
     student = {
       user_type: "student",
@@ -33,9 +32,11 @@ module.exports = {
       email : req.body.email,
       academic_degree : req.body.academic_degree,
       private_email : req.body.private_email,
-      address_id: address_id,
-  }
+      bank_account: req.body.bank_account,
+      address_id: address_id._id,
+    }
     let result = await infrastructure.createUser(student)
+    student.id = result.id
     return student
   }
 }

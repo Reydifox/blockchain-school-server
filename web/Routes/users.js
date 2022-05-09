@@ -43,7 +43,7 @@ router.route('/')
     res.json(result)
   })
   .post(async (req, res) => {
-    let result = user.addUser(req)
+    let result = await user.addUser(req)
     res.json(result)
   })
 router.route('/:id')

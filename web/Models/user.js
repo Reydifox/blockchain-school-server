@@ -16,8 +16,13 @@ module.exports = {
         return result
     },
     addUser: async function (req) {
-        let address = req.body.address
-        let result_address = await helpers.putAddress(address)
+        if ('address' in req.body) {
+            let address = req.body.address
+            let result_address = await helpers.putAddress(address)
+            let address_id = result_address._id
+        } else { 
+            let address_id = undefined
+        }
         let user = {
             user_type: req.body.user_type,
             first_name : req.body.first_name,
@@ -25,10 +30,11 @@ module.exports = {
             email : req.body.email,
             academic_degree : req.body.academic_degree,
             private_email : req.body.private_email,
-            address_id: result_address.id
+            address_id: address_id._id
         }
         let result = await infrastructure.createUser(user)
-        return result
+        user._id = result.user_id
+        return user
     },
     getAllUsers: async function (req) {
         let users  = await infrastructure.getAllEntities(auth.get_bearer(req),'user')

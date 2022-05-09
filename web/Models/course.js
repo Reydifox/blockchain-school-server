@@ -5,6 +5,6 @@ module.exports = {
   getAllCourses: async function (req) {
     let courses  = await infrastructure.getAllEntities(auth.get_bearer(req),'course')
     console.log(courses)
-    return courses
+    return courses.result
   },
 };

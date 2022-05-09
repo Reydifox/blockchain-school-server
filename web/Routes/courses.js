@@ -1,11 +1,12 @@
 const express = require('express')
+const course = require('../Models/course')
 const router = express.Router()
 const person = {
   id : 1,
   first_name : "Meno",
   last_name : "Priezvisko",
 }
-const course = {
+const course1 = {
   id : 1,
   name : "Programovanie 1",
   acronym : "PROG-1",
@@ -29,9 +30,13 @@ const course_detail = {
 
 
 router.route('/')
-  .get(async (req, res) => {
-    res.json([course, course])
+  .get( async (req, res) => {
+    let result  = await course.getAllCourses(req)
+    res.json(result)
   })
+  // .get(async (req, res) => {
+  //   res.json([course1, course1])
+  // })
   .post(async (req, res) => {
     res.json(req.body)
   })
@@ -47,7 +52,7 @@ router.route('/:id')
   })
 
 router.get('/results/:student_id', async (req, res) => {
-  res.json([course, course])
+  res.json([course1, course1])
 })
 
 router.get('/results/:student_id/detail', async (req, res) => {

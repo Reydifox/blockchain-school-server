@@ -1,27 +1,30 @@
 const auth = require('../Auth/auth')
 const infrastructure = require('../../fabcar/api/api.js');
+const user = require('./user');
+const helpers = require('../Helpers/helpers');
 
 module.exports = {
   getAllStudents: async function (req) {
-    let users  = await infrastructure.getAllEntities(auth.get_bearer(req),'user')
+    let users  = await user.getAllUsers(req)
     let output = []
-    console.log(users)
-    users.result.forEach(user => { 
+    users.forEach(user => { 
       if (user.user_type == 'student') {
         output.push(user)
       }
     });
     return output
   },
-  getStudentById: async function (req) {
-    let student = await infrastructure.getEntity(auth.get_bearer(req), req.params.id)
-    console.log(student)
-    return student
-  },
   getStudentByProgramId: function (req) {
     return 0
   },
   addStudent: async function (req) {
+    if ('address' in req.body) {
+      let address = req.body.address
+      let result_address = await helpers.putAddress(address)
+      let address_id = result_address._id
+    } else { 
+      let address_id = undefined
+    }
     student = {
       user_type: "student",
       first_name : req.body.first_name,
@@ -29,17 +32,11 @@ module.exports = {
       email : req.body.email,
       academic_degree : req.body.academic_degree,
       private_email : req.body.private_email,
-      address_id: undefined
-  }
+      bank_account: req.body.bank_account,
+      address_id: address_id._id,
+    }
     let result = await infrastructure.createUser(student)
+    student.id = result.id
     return student
-  },
-  updateStudent: async function (req) {
-    let result = await infrastructure.updateUser(req.body)
-    return result
-  },
-  deleteStudent: async function (req) {
-    let result = await infrastructure.deleteUser(req.params.id)
-    return result
   }
-};
+}

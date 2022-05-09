@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const student = require('../Models/student')
+const user = require('../Models/user')
 const auth = require('../Auth/auth')
 const infrastructure = require('../../fabcar/api/api.js');
 const student_placeholder = {
@@ -27,7 +28,7 @@ router.route('/')
 router.route('/:id')
     .get( async (req, res) => {
         try {
-            let result = await student.getStudentById(req)
+            let result = await user.getUserById(req)
             res.json(result)
         } catch (e) {
             res.json(e)
@@ -35,12 +36,12 @@ router.route('/:id')
     })
     // TODO - edit studenta
     .put( async (req, res) => {
-        let result = await student.updateStudent(req)
+        let result = await user.updateUser(req)
         res.json(result)
     })
     .delete( async (req, res) => {
         try {
-            let result = await student.deleteStudent(req)
+            let result = await user.deleteUser(req)
             res.statusCode(204)
         } catch (e) {
             res.json(e)

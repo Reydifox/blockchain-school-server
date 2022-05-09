@@ -148,6 +148,13 @@ async function initializeData() {
     })
     console.log(programme)
  
+    programme = await infrastructure.putEntity('admin', {
+        entity_name:"study_programme",
+        name:"Elektrotechnika",
+        acronym:"ELK"
+    })
+    console.log(programme)
+
     thesis = await infrastructure.putEntity('admin', {
         entity_name:"thesis",
         authot_id: undefined,

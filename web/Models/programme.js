@@ -26,6 +26,9 @@ module.exports = {
         programme.name = req.body.name
         programme.acronym = req.body.acronym
         let result = await infrastructure.updateEntity(auth.get_bearer(req),programme)
+        if (result.data.ok) {
+            return programme
+        }
         return result
     },
     deleteProgramme: async function (req) {

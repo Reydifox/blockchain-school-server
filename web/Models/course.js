@@ -45,5 +45,28 @@ module.exports = {
     let result = await infrastructure.putEntity('admin', course);
     return course;
   },
+  setGarant: async function (req) {
+    let course = await infrastructure.getEntity(auth.get_bearer(req), req.params.id);
+    if ('garant_id' in req.body) {
+      let garant = await infrastructure.getEntity(auth.get_bearer(req), req.body.garant_id);
+      course.garant = garant;
+      course.garant_id = req.body.garant_id;
+      result = await infrastructure.updateEntity(auth.get_bearer(req), course);
+    }
+    return result;
+  },
+  addPrerequisite: async function(req) {
+    let course = await infrastructure.getEntity(auth.get_bearer(req), req.params.id);
+    if ('prerequisite_course_id' in req.body) {
+      if(Array.isArray(course.prerequisite_course_id) && course.prerequisite_course_id.length) {
+        course.prerequisite_course_id.push(req.body.prerequisite_course_id);
+      }
+      else{
+        course.prerequisite_course_id = req.body.prerequisite_course_id;
+      }
+      result = await infrastructure.updateEntity(auth.get_bearer(req), course);
+    }
+    return result;
+  },
 
 };

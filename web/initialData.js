@@ -95,6 +95,7 @@ async function initializeData() {
         private_email:   "jozef.krail@gmail.com",
         address_id: address4._id
     })
+    faculty_member2 = await helpers.getLatestID('user')
     console.log(faculty_member2)
 
     course1 = await infrastructure.putEntity('admin', {
@@ -106,6 +107,7 @@ async function initializeData() {
         trimester: undefined,
         prerequisite_course_id: undefined
     })
+    course1 = await helpers.getLatestID('course')
     console.log(course1)
 
     course2 = await infrastructure.putEntity('admin', {
@@ -117,6 +119,7 @@ async function initializeData() {
         trimester: undefined,
         prerequisite_course_id: undefined
     })
+    course2 = await helpers.getLatestID('course')
     console.log(course2)
 
     course3 = await infrastructure.putEntity('admin', {
@@ -140,6 +143,17 @@ async function initializeData() {
         prerequisite_course_id: undefined
     })
     console.log(course4)
+
+    course5 = await infrastructure.putEntity('admin', {
+        entity_name: "course",
+        garant_id: faculty_member2._id,
+        name: "testcourse",
+        acronym: "TSTCRS",
+        description: "test desc",
+        trimester: "3",
+        prerequisite_course_id: [course1._id, course2._id]
+    })
+    console.log(course5)
     
     programme = await infrastructure.putEntity('admin', {
         entity_name:"study_programme",

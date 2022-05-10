@@ -22,12 +22,9 @@ module.exports = {
         return result
     },
     updateProgramme: async function (req) {
-        let programme = {
-            _id: req.params.id,
-            name: req.body.name,
-            acronym:req.body.acronym
-        } 
-        
+        let programme = await this.getProgrammeById(req)
+        programme.name = req.body.name
+        programme.acronym = req.body.acronym
         let result = await infrastructure.updateEntity(auth.get_bearer(req),programme)
         return result
     },

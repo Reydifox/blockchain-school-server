@@ -41,7 +41,11 @@ module.exports = {
         return users.result
     },
     updateUser: async function (req) {
-        let result = await infrastructure.updateUser(req.body)
+        let user = await infrastructure.getEntity(auth.get_bearer(req),req.params.id)
+        let user_request = req.body
+        user_request._id = user._id
+        user_request._rev = user._rev
+        let result = await infrastructure.updateUser(user_request)
         return result
       },
 }

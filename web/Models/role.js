@@ -49,13 +49,15 @@ module.exports = {
                 })
             }
         }
-        let role = {
-            _id: req.params.id,
-            name: req.body.name,
-            definition:req.body.definition,
-            system_credibility_id: credibilities
-        }
+        let role = await infrastructure.getEntity(auth.get_bearer(req),req.params.id)
+        role.name = req.body.name,
+        role.definition = req.body.definition,
+        role.system_credibility_id = credibilities
+    
         let result = await infrastructure.updateEntity(auth.get_bearer(req),role)
+        if (result.data.ok) {
+            return role
+        }
         return result
     }
 }

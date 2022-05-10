@@ -1,28 +1,45 @@
 const express = require('express')
 const router = express.Router()
-const role = {
-  id : 1,
-  name : "Meno",
-  definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-}
+const role = require('../Models/role')
 
 
 router.route('/')
   .get(async (req, res) => {
-    res.json([role, role])
+    let result = await role.getAllRoles(req)
+    res.json(result)
   })
   .post(async (req, res) => {
-    res.json(req.body)
+    let result = await role.addUserRole(req)
+    res.json(result)
   })
 router.route('/:id')
   .get(async (req, res) => {
-    res.json(role)
+    try {
+      if (req.params.id == 'credibilities') {
+        let result = await role.getAllCreditibilities(req)
+        res.json(result)
+      } else { 
+        let result = await role.getUserRoleById(req)
+        res.json(result)
+      }
+    } catch (e) {
+      res.json(e)
+    }
   })
   .put(async (req, res) => {
-    res.json(req.body)
+    try {
+      let result = await role.updateUserRole(req)
+      res.json(result)
+    } catch (e) {
+      res.json(e)
+    }
   })
   .delete(async (req, res) => {
-    res.sendStatus(204)
+    try {
+      let result = await role.deleteUserRole(req)
+      res.sendStatus(204)
+    } catch (e) {
+      res.json(e)
+    }  
   })
-
 module.exports = router

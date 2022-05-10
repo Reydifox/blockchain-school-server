@@ -169,6 +169,47 @@ async function initializeData() {
     })
     console.log(programme)
 
+    system_credibility = await infrastructure.putEntity('admin', {
+        entity_name: "system_credibility",
+        name: "Sys Credibility 1",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    system_credibility = await infrastructure.putEntity('admin', {
+        entity_name: "system_credibility",
+        name: "Sys Credibility 2",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    }) 
+
+    system_credibility = await infrastructure.putEntity('admin', {
+        entity_name: "system_credibility",
+        name: "Sys Credibility 3",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    system_credibility = await infrastructure.putEntity('admin', {
+        entity_name: "system_credibility",
+        name: "Sys Credibility 4",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    system_credibility_id = await helpers.getLatestID('system_credibility')
+    console.log('-----------------------')
+    console.log(system_credibility_id)
+    console.log('-----------------------')
+
+    role1 = await infrastructure.putEntity('admin',{
+        entity_name: "user_role",
+        system_credibility_id: [system_credibility_id._id],
+        name : "Rola1",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+    console.log(role1)
+    user_role_id = await helpers.getLatestID('user_role')
+    console.log('-----------------------')
+    console.log(user_role_id)
+    console.log('-----------------------')
+
     thesis = await infrastructure.putEntity('admin', {
         entity_name:"thesis",
         authot_id: undefined,

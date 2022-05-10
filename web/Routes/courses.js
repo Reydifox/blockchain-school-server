@@ -40,8 +40,13 @@ router.route('/')
   })
 router.route('/:id')
   .get(async (req, res) => {
-    let result  = await course.getCourseById(req)
-    res.json(result)
+    try {
+      let result  = await course.getCourseById(req)
+      res.json(result)
+    } catch (e) {
+      res.json(e)
+    }  
+
   })
   .put(async (req, res) => {
     res.json(req.body)

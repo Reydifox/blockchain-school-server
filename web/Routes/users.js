@@ -57,7 +57,12 @@ router.route('/:id')
   })
   //TODO User update
   .put(async (req, res) => {
-    res.json(req.body)
+    try {
+      let result = await user.updateUser(req)
+      res.json(result)
+    } catch (e) {
+      res.json(e)
+    }
   })
   .delete(async (req, res) => {
     try {

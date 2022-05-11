@@ -14,7 +14,14 @@ module.exports = {
     },
     getAddress: async function (address_id) {
         let result = await infrastructure.getEntity('admin',address_id)
-        console.log(result)
+        return result
+    },
+    getSystemCredibilities: async function (system_credibilities) {
+        let result = []
+        for (let id in system_credibilities) {
+            let output = await infrastructure.getEntity('admin',system_credibilities[id])
+            result.push(output)
+        }
         return result
     }
 }

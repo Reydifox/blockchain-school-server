@@ -95,6 +95,7 @@ async function initializeData() {
         private_email:   "jozef.krail@gmail.com",
         address_id: address4._id
     })
+    faculty_member2 = await helpers.getLatestID('user')
     console.log(faculty_member2)
 
     course1 = await infrastructure.putEntity('admin', {
@@ -106,6 +107,7 @@ async function initializeData() {
         trimester: undefined,
         prerequisite_course_id: undefined
     })
+    course1 = await helpers.getLatestID('course')
     console.log(course1)
 
     course2 = await infrastructure.putEntity('admin', {
@@ -117,6 +119,7 @@ async function initializeData() {
         trimester: undefined,
         prerequisite_course_id: undefined
     })
+    course2 = await helpers.getLatestID('course')
     console.log(course2)
 
     course3 = await infrastructure.putEntity('admin', {
@@ -140,6 +143,17 @@ async function initializeData() {
         prerequisite_course_id: undefined
     })
     console.log(course4)
+
+    course5 = await infrastructure.putEntity('admin', {
+        entity_name: "course",
+        garant_id: faculty_member2._id,
+        name: "testcourse",
+        acronym: "TSTCRS",
+        description: "test desc",
+        trimester: "3",
+        prerequisite_course_id: [course1._id, course2._id]
+    })
+    console.log(course5)
     
     programme = await infrastructure.putEntity('admin', {
         entity_name:"study_programme",
@@ -154,6 +168,47 @@ async function initializeData() {
         acronym:"ELK"
     })
     console.log(programme)
+
+    system_credibility = await infrastructure.putEntity('admin', {
+        entity_name: "system_credibility",
+        name: "Sys Credibility 1",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    system_credibility = await infrastructure.putEntity('admin', {
+        entity_name: "system_credibility",
+        name: "Sys Credibility 2",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    }) 
+
+    system_credibility = await infrastructure.putEntity('admin', {
+        entity_name: "system_credibility",
+        name: "Sys Credibility 3",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    system_credibility = await infrastructure.putEntity('admin', {
+        entity_name: "system_credibility",
+        name: "Sys Credibility 4",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    system_credibility_id = await helpers.getLatestID('system_credibility')
+    console.log('-----------------------')
+    console.log(system_credibility_id)
+    console.log('-----------------------')
+
+    role1 = await infrastructure.putEntity('admin',{
+        entity_name: "user_role",
+        system_credibility_id: [system_credibility_id._id],
+        name : "Rola1",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+    console.log(role1)
+    user_role_id = await helpers.getLatestID('user_role')
+    console.log('-----------------------')
+    console.log(user_role_id)
+    console.log('-----------------------')
 
     thesis = await infrastructure.putEntity('admin', {
         entity_name:"thesis",

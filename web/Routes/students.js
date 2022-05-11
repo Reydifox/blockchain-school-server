@@ -36,8 +36,12 @@ router.route('/:id')
     })
     // TODO - edit studenta
     .put( async (req, res) => {
-        let result = await user.updateUser(req)
-        res.json(result)
+        try {
+            let result = await user.updateUser(req)
+            res.json(result)
+          } catch (e) {
+            res.json(e)
+          }
     })
     .delete( async (req, res) => {
         try {

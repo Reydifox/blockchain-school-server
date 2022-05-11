@@ -72,12 +72,22 @@ router.get('/:id/file', async (req, res) => {
   //res.sendFile() //export do csv?
 })
 
-router.post('/:id/lecturer', async (req, res) => {
-  res.json(req.body)
+router.post('/:id/garant', async (req, res) => {
+  try {
+    let result  = await course.setGarant(req)
+    res.json(result)
+  } catch (e) {
+    res.json(e)
+  }  
 })
 
-router.post('/:id/file', async (req, res) => {
-  res.send('1')
+router.post('/:id/prerequisite', async (req, res) => {
+  try {
+    let result  = await course.addPrerequisite(req)
+    res.json(result)
+  } catch (e) {
+    res.json(e)
+  }  
 })
 
 router.delete('/:course_id/lecturer/:lecturer_id', async (req, res) => {

@@ -264,6 +264,15 @@ async function getUserSession(email, password){
     return result
 }
 
+async function entityExists(entity_id){
+    try {
+        const response = await getEntity('admin', entity_id)
+        return true
+    } catch(err) {
+        return false
+    }
+}
+
 
 // used for testing purposes
 async function main(){
@@ -277,6 +286,7 @@ module.exports.getEntity = getEntity
 module.exports.putEntity = putEntity
 module.exports.updateEntity = updateEntity
 module.exports.deleteEntity = deleteEntity
+module.exports.entityExists = entityExists
 module.exports.createUser = createUser
 module.exports.deleteUser = deleteUser
 module.exports.updateUser = updateUser

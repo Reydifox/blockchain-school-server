@@ -68,5 +68,20 @@ module.exports = {
     }
     return result;
   },
+  getGarantCourses: async function(req) {
+    let allCoursesResult  = await infrastructure.getAllEntities(auth.get_bearer(req),'course');
+    let allCourses = allCoursesResult.result;
+    let garantCourses = []
+    if(Array.isArray(allCourses) && allCourses) {
+      for (i in allCourses) {
+        if ('garant_id' in allCourses[i]) {
+          if (allCourses[i].garant_id == req.params.id) {
+            garantCourses.push(allCourses[i]);
+          }
+        }
+      }
+    }
+    return garantCourses;
+  }
 
 };

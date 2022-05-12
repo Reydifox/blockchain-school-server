@@ -72,6 +72,15 @@ router.get('/:id/file', async (req, res) => {
   //res.sendFile() //export do csv?
 })
 
+router.get('/:id/courses', async (req, res) => {
+  try {
+    let result  = await course.getGarantCourses(req)
+    res.json(result)
+  } catch (e) {
+    res.json(e)
+  }  
+})
+
 router.post('/:id/garant', async (req, res) => {
   try {
     let result  = await course.setGarant(req)

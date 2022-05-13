@@ -67,7 +67,7 @@ async function initializeData() {
         first_name: "Marek",
         last_name: "Lunter",
         email:"xlunter@stuba.sk",
-        password: undefined,
+        password: "955db0b81ef1989b4a4dfeae8061a9a6", // originalne je to "heslo"
         academic_degree: "Bc.",
         private_email:   "marek.lunter@gmail.com",
         address_id: address2._id

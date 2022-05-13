@@ -3,6 +3,8 @@ const cors = require('cors');
 const path = require('path');
 const https = require('https')
 const fs = require('fs')
+var crypto = require('crypto')
+const session = require('express-session');
 
 // for password hashing, will use when in employee registration is implemented
 const bcrypt = require('bcrypt');
@@ -21,6 +23,12 @@ app.use(cors())
 app.use(express.urlencoded());
 app.use(express.json());
 
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}));
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
@@ -35,20 +43,60 @@ app.post('/register', async (req, res) => {
 })
 
 app.post('/login', async (req, res) =>{
-    
-    // TODO: retrieve user info from DB
-    const user = {
-        id: 1,
-        username: "test",
-        email: "email@email.com"
-    };
-    
-    jwt.sign({user: user}, secret_key, {expiresIn: '2h'}, (err, token) => {
-        res.json({
-            token: token
+    let email = req.body.email;
+    let password = req.body.password; 
+    var hash = crypto.createHash('md5').update(password).digest('hex')
+    const user = await get_userInfo(email,hash);
+    if ('email' in user) {
+        req.session.loggedin = true;
+        req.session.user = user;
+        req.params.user_id = user._id;
+        const role = await get_userRole(user._id);
+        jwt.sign({user: user}, secret_key, {expiresIn: '2h'}, (err, token) => {
+            res.json({
+                successful: "True",
+                token: token,
+                user: user,
+                role: role,
+            });
         });
-    });
+    }
+    else {
+        res.json({
+            successful: "False"
+        })
+    }
     
+})
+
+// if user is logged in, it will show his email
+app.get('/home', function(req,res){
+    if(req.session.loggedin){
+        res.send("Welcome, " + req.session.user.email);
+    }
+    else {
+        res.send("Please log in");
+    }
+})
+
+app.get('/logout', function(req,res){
+    req.session.loggedin = false
+    res.send("You have been succesfully logged out")
+})
+
+app.get('/changePassword', async function(req,res){
+    if(req.session.loggedin){
+        const user = req.session.user;
+        var newHash = crypto.createHash('md5').update(req.body.password).digest('hex');
+        user.password = newHash;
+        const result = await post_updateUser(user);
+        if(result.successful){
+            res.send("Password changed succesfully");
+        }      
+    }
+    else {
+        res.send("Please log in to change password");
+    }
 })
 
 // used for testing purposes, path '/protected' requires an auth token
@@ -86,6 +134,13 @@ const users = require('./Routes/users')
 const results = require('./Routes/results')
 const courses = require('./Routes/courses')
 const initializeData = require('./initialData')
+
+const { get_userInfo, post_updateUser, get_userRole } = require('./Auth/auth.js');
+const roleModel = require('./Models/role')
+const { request } = require('http');
+const { response } = require('express');
+const { post } = require('./Routes/students');
+const role = require('./Models/role');
 
 app.use('/students', students)
 app.use('/programme', programme)

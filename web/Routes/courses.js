@@ -1,32 +1,6 @@
 const express = require('express')
 const course = require('../Models/course')
 const router = express.Router()
-const person = {
-  id : 1,
-  first_name : "Meno",
-  last_name : "Priezvisko",
-}
-const course1 = {
-  id : 1,
-  name : "Programovanie 1",
-  acronym : "PROG-1",
-  trimester : 1,
-}
-const course_detail = {
-  id : 2,
-  name : "Programovanie 2",
-  acronym : "PROG-2",
-  trimester : 2,
-  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-  garant_id : 25,
-  garant_name : "Meno Priezvisko",
-  lecturers: [person, person],
-  prerequisites : [{
-    id : 1,
-    name : "Programovanie 1",
-    acronym : "PROG-1",
-  }]
-}
 
 
 router.route('/')
@@ -52,7 +26,12 @@ router.route('/:id')
     res.json(req.body)
   })
   .delete(async (req, res) => {
-    res.sendStatus(204)
+    try {
+      let result = await course.deleteCourse(req)
+      res.statusCode(204)
+    } catch (e) {
+        res.json(e)
+    }
   })
 
 router.get('/results/:student_id', async (req, res) => {
@@ -71,6 +50,34 @@ router.get('/:id/file', async (req, res) => {
   res.send('1')
   //res.sendFile() //export do csv?
 })
+
+router.get('/:id/garant_courses', async (req, res) => {
+  try {
+    let result  = await course.getGarantCourses(req)
+    res.json(result)
+  } catch (e) {
+    res.json(e)
+  }  
+})
+
+router.get('/:id/lecturer_courses', async (req, res) => {
+  try {
+    let result  = await course.getLecturerCourses(req)
+    res.json(result)
+  } catch (e) {
+    res.json(e)
+  }  
+})
+
+router.get('/:id/student_courses', async (req, res) => {
+  try {
+    let result  = await course.getStudentCourses(req)
+    res.json(result)
+  } catch (e) {
+    res.json(e)
+  }  
+})
+
 
 router.post('/:id/garant', async (req, res) => {
   try {

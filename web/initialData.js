@@ -72,7 +72,9 @@ async function initializeData() {
         private_email:   "marek.lunter@gmail.com",
         address_id: address2._id
     })
+    student2 = await helpers.getLatestID('user')
     console.log(student2)
+
     faculty_member1 = await infrastructure.createUser({
         user_type: "faculty_member",
         first_name: "Andrej",
@@ -83,6 +85,7 @@ async function initializeData() {
         private_email:  "andrej.hronec@gmail.com",
         address_id: address3._id
     })
+    faculty_member1 = await helpers.getLatestID('user')
     console.log(faculty_member1)
 
     faculty_member2 = await infrastructure.createUser({
@@ -147,14 +150,16 @@ async function initializeData() {
     course5 = await infrastructure.putEntity('admin', {
         entity_name: "course",
         garant_id: faculty_member2._id,
+        lecturer_id: [faculty_member1._id, faculty_member2._id],
         name: "testcourse",
         acronym: "TSTCRS",
         description: "test desc",
         trimester: "3",
         prerequisite_course_id: [course1._id, course2._id]
     })
+    course5 = await helpers.getLatestID('course')
     console.log(course5)
-    
+
     programme = await infrastructure.putEntity('admin', {
         entity_name:"study_programme",
         name:"Aplikovana inf",
@@ -235,18 +240,38 @@ async function initializeData() {
     console.log(thesis)
     getThesis = await infrastructure.getAllEntities('admin', 'thesis')
     console.log(getThesis)
-    course_result = await infrastructure.putEntity('admin', {
-        final_result_id: "id_ajlndad",
-        entity_name:"course_result",
-        midterm_result_id: "aopada",
-        semminar_grading_record_id:"oafpawfa",
-        student_id:"unaofaef",
-        course_id:"adada",
-        academic_year_id: "adasda"
+    
+    course_lecturer1 = await infrastructure.createUser({
+        lecturer_id: faculty_member2._id,
+        course_id: course5._id,
+        lecturer_level: "Prednasajuci"
     })
-    console.log(course_result)
-    getResult = await infrastructure.getAllEntities('admin', 'course_result')
-    console.log(getResult)
+    course_lecturer1 = await helpers.getLatestID('user')
+    console.log(course_lecturer1)
+    
+    course_result1 = await infrastructure.putEntity('admin', {
+        entity_name:"course_result",
+        final_result: "A",
+        midterm_result: "60",
+        semminar_grading_record:"B",
+        student_id: student2._id,
+        course_id: course5._id,
+        academic_year: "2022"
+    })
+    course_result1 = await helpers.getLatestID('course_result')
+    console.log(course_result1)
+
+    course_result2 = await infrastructure.putEntity('admin', {
+        entity_name:"course_result",
+        final_result: "C",
+        midterm_result: "40",
+        semminar_grading_record:"D",
+        student_id: student2._id,
+        course_id: course2._id,
+        academic_year: "2022"
+    })
+    course_result1 = await helpers.getLatestID('course_result')
+    console.log(course_result2)
 }
 
 module.exports.initializeData = initializeData

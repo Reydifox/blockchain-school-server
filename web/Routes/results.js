@@ -1,28 +1,36 @@
 const express = require('express')
+const course_result = require('../Models/result')
 const router = express.Router()
 
-const grading_record = {
-  score : 1,
-  created : 1651341121,
-}
-const result = {
-  student_id : 1,
-  final_result : "A",
-  midterm_result : true,
-  grading_records : [grading_record, grading_record]
-}
-
+router.route('/')
+  .get( async (req, res) => {
+    let result  = await course_result.getResults(req)
+    res.json(result)
+  })
+  .post(async (req, res) => {
+    try {
+      let result  = await course_result.addResult(req)
+      res.json(result)
+    } catch (e) {
+      res.json(e)
+    }  
+  })
 
 router.get('/:course_id', async (req, res) => {
-  res.json([result, result])
+  res.json([course_result, course_result])
 })
 
-router.route('/:course_id/:student_id')
+router.route('/courses/:course_id/students/:student_id')
     .get(async (req, res) => {
-      res.json(result)
+      try {
+        let result  = await course_result.getResult(req)
+        res.json(result)
+      } catch (e) {
+        res.json(e)
+      }  
     })
     .post(async (req, res) => {
-      res.json(req.body)
+      res.json(res)
     })
     .put(async (req, res) => {
       res.json(req.body)

@@ -45,6 +45,10 @@ module.exports = {
     let result = await infrastructure.putEntity('admin', course);
     return course;
   },
+  deleteCourse: async function(req) {
+    let result = await infrastructure.deleteEntity(auth.get_bearer(req), req.params.id);
+    return result
+  },
   setGarant: async function (req) {
     let course = await infrastructure.getEntity(auth.get_bearer(req), req.params.id);
     if ('garant_id' in req.body) {
@@ -68,5 +72,53 @@ module.exports = {
     }
     return result;
   },
+  getGarantCourses: async function(req) {
+    let allCoursesResult  = await infrastructure.getAllEntities(auth.get_bearer(req),'course');
+    let allCourses = allCoursesResult.result;
+    let garantCourses = []
+    if(Array.isArray(allCourses) && allCourses) {
+      for (i in allCourses) {
+        if ('garant_id' in allCourses[i]) {
+          if (allCourses[i].garant_id == req.params.id) {
+            garantCourses.push(allCourses[i]);
+          }
+        }
+      }
+    }
+    return garantCourses;
+  },
 
+  getLecturerCourses: async function(req) {
+    let allCoursesResult  = await infrastructure.getAllEntities(auth.get_bearer(req),'course');
+    let allCourses = allCoursesResult.result;
+    let lecturerCourses = []
+    if(Array.isArray(allCourses) && allCourses) {
+      for (i in allCourses) {
+        if ('lecturer_id' in allCourses[i]) {
+          for (id in allCourses[i].lecturer_id){
+            if (allCourses[i].lecturer_id[id] == req.params.id) {
+              lecturerCourses.push(allCourses[i]);
+              break;
+            }
+          }
+        }
+      }
+    }
+    return lecturerCourses;
+  },
+
+  getStudentCourses: async function(req) {
+    let allCourseResultsResult  = await infrastructure.getAllEntities(auth.get_bearer(req),'course_result');
+    let allCourseResults = allCourseResultsResult.result;
+    let studentCourses = []
+    if(Array.isArray(allCourseResults) && allCourseResults) {
+      for (i in allCourseResults){
+        if (allCourseResults[i].student_id == req.params.id) {
+          let course = await infrastructure.getEntity(auth.get_bearer(req), allCourseResults[i].course_id);
+          studentCourses.push(course);
+        }
+      }
+    }
+    return studentCourses;
+  },
 };

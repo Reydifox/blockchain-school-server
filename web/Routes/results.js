@@ -20,7 +20,7 @@ router.get('/:course_id', async (req, res) => {
   res.json([course_result, course_result])
 })
 
-router.route('/:course_id/:student_id')
+router.route('/courses/:course_id/students/:student_id')
     .get(async (req, res) => {
       try {
         let result  = await course_result.getResult(req)

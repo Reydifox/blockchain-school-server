@@ -50,6 +50,71 @@ async function initializeData() {
     address4 = await helpers.getLatestID('address')
     console.log(address4)
 
+    role1 = await infrastructure.putEntity('admin',{
+        entity_name: "user_role",
+        system_credibility_id: [],
+        name : "Dean",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    role1 = await infrastructure.putEntity('admin',{
+        entity_name: "user_role",
+        system_credibility_id: [],
+        name : "Lecturer",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    role1 = await infrastructure.putEntity('admin',{
+        entity_name: "user_role",
+        system_credibility_id: [],
+        name : "Course garant",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    role1 = await infrastructure.putEntity('admin',{
+        entity_name: "user_role",
+        system_credibility_id: [],
+        name : "Programme garant",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    user_role_id2 = await helpers.getLatestID('user_role')
+
+
+    role1 = await infrastructure.putEntity('admin',{
+        entity_name: "user_role",
+        system_credibility_id: [],
+        name : "Subdean",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    user_role_id1 = await helpers.getLatestID('user_role')
+
+
+    role1 = await infrastructure.putEntity('admin',{
+        entity_name: "user_role",
+        system_credibility_id: [],
+        name : "System admin",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+    console.log(role1)
+    user_role_id = await helpers.getLatestID('user_role')
+    console.log('-----------------------')
+    console.log(user_role_id)
+    console.log('-----------------------')
+
+    faculty_member3 = await infrastructure.createUser({
+        user_type: "faculty_member",
+        first_name: "Jan",
+        last_name: "Mrkva",
+        email:"xmrkva@stuba.sk",
+        password: "955db0b81ef1989b4a4dfeae8061a9a6", // originalne je to "heslo"
+        academic_degree: "doc. Ing.|PhD.",
+        private_email:   "jan.mrkva@gmail.com",
+        address_id: address4._id,
+        user_role_id:user_role_id._id
+    })
+
     student1 = await infrastructure.createUser({
         user_type: "student",
         first_name: "Marek",
@@ -80,10 +145,11 @@ async function initializeData() {
         first_name: "Andrej",
         last_name: "Hronec",
         email:"xhronec@mail.sk",
-        password: undefined,
+        password: "955db0b81ef1989b4a4dfeae8061a9a6", // originalne je to "heslo"
         academic_degree: "Ing.|PhD.",
         private_email:  "andrej.hronec@gmail.com",
-        address_id: address3._id
+        address_id: address3._id,
+        user_role_id:user_role_id2._id
     })
     faculty_member1 = await helpers.getLatestID('user')
     console.log(faculty_member1)
@@ -93,10 +159,11 @@ async function initializeData() {
         first_name: "Jozef",
         last_name: "Kralik",
         email:"xkralik@stuba.sk",
-        password: undefined,
+        password: "955db0b81ef1989b4a4dfeae8061a9a6", // originalne je to "heslo"
         academic_degree: "doc. Ing.|PhD.",
         private_email:   "jozef.krail@gmail.com",
-        address_id: address4._id
+        address_id: address4._id,
+        user_role_id:user_role_id1._id
     })
     faculty_member2 = await helpers.getLatestID('user')
     console.log(faculty_member2)
@@ -203,52 +270,6 @@ async function initializeData() {
     console.log(system_credibility_id)
     console.log('-----------------------')
 */
-    role1 = await infrastructure.putEntity('admin',{
-        entity_name: "user_role",
-        system_credibility_id: [],
-        name : "Dean",
-        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    })
-
-    role1 = await infrastructure.putEntity('admin',{
-        entity_name: "user_role",
-        system_credibility_id: [],
-        name : "Lecturer",
-        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    })
-
-    role1 = await infrastructure.putEntity('admin',{
-        entity_name: "user_role",
-        system_credibility_id: [],
-        name : "Course garant",
-        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    })
-
-    role1 = await infrastructure.putEntity('admin',{
-        entity_name: "user_role",
-        system_credibility_id: [],
-        name : "Programme garant",
-        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    })
-
-    role1 = await infrastructure.putEntity('admin',{
-        entity_name: "user_role",
-        system_credibility_id: [],
-        name : "Subdean",
-        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    })
-
-    role1 = await infrastructure.putEntity('admin',{
-        entity_name: "user_role",
-        system_credibility_id: [],
-        name : "System admin",
-        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    })
-    console.log(role1)
-    user_role_id = await helpers.getLatestID('user_role')
-    console.log('-----------------------')
-    console.log(user_role_id)
-    console.log('-----------------------')
 
     thesis = await infrastructure.putEntity('admin', {
         entity_name:"thesis",
@@ -305,7 +326,7 @@ async function initializeData() {
         course_id: course2._id,
         academic_year: "2022"
     })
-    course_result2 = await helpers.getLatestID('course_result')
+    course_result1 = await helpers.getLatestID('course_result')
     console.log(course_result2)
 }
 

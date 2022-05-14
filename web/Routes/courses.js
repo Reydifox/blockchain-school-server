@@ -23,7 +23,12 @@ router.route('/:id')
 
   })
   .put(async (req, res) => {
-    res.json(req.body)
+    try {
+      let result  = await course.editCourseById(req)
+      res.json(result)
+    } catch (e) {
+      res.json(e)
+    }  
   })
   .delete(async (req, res) => {
     try {

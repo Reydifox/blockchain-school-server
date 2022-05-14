@@ -45,6 +45,17 @@ module.exports = {
     let result = await infrastructure.putEntity('admin', course);
     return course;
   },
+  editCourseById: async function(req) {
+    let course = await infrastructure.getEntity(auth.get_bearer(req), req.params.id);
+    course.garant_id = req.body.garant_id;
+    course.name = req.body.name;
+    course.acronym = req.body.acronym;
+    course.description = req.body.description;
+    course.trimester = req.body.trimester;
+    course.prerequisite_course_id = req.body.prerequisite_course_id;
+    result = await infrastructure.updateEntity(auth.get_bearer(req), course);
+    return result;
+  },
   deleteCourse: async function(req) {
     let result = await infrastructure.deleteEntity(auth.get_bearer(req), req.params.id);
     return result

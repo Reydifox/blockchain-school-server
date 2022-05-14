@@ -26,12 +26,34 @@ async function getAllFromDb(entity_name){
     return couch.get(dbname, view_url)
 }
 
+async function getAllUsers(){
+    let result_arr = []
+    const db_user_data = await getAllFromDb('user')
+    const ledger_user_data_raw = await ledger_query('admin', 'getAllEntities', 'user')
+    const ledger_user_data = JSON.parse(ledger_user_data_raw.toString())
+    db_user_data.data.rows.forEach(db_user => {
+        ledger_user_data.result.forEach(ledger_user => {
+            if (db_user.value._id == ledger_user.Key){
+                let full_user_data = {
+                    ...db_user.value,
+                    ...ledger_user.Record
+                }
+                result_arr.push(full_user_data)
+            }
+        })
+    })
+    return result_arr
+}
+
 // retrieve all entities of a given type defined by entity_name,
 // calling getAllEntities('id_example', 'course') will retrieve all courses etc.
 async function getAllEntities(user_id, entity_name){
     let result = {}
     let result_arr = []
     const entity_location = getEntityLocation(entity_name)
+    if (entity_name === 'user'){
+        return await getAllUsers()
+    }
     if (entity_location === 'db'){
         const response = await getAllFromDb(entity_name)
         response.data.rows.forEach(element => {

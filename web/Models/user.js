@@ -28,8 +28,16 @@ module.exports = {
         } else { 
             let address_id = undefined
         }
-        let password = req.body.password; 
-        var hash = crypto.createHash('md5').update(password).digest('hex')
+        if (req.body.password != null) {
+            let password = req.body.password; 
+            var hash = crypto.createHash('md5').update(password).digest('hex')
+        } else {
+            var hash = req.body.password
+        }
+        let user_role_id = undefined
+        if ('user_role_id' in req.body && req.body.user_role_id != null) {
+            user_role_id = req.body.user_role_id
+        } 
         let user = {
             user_type: req.body.user_type,
             first_name : req.body.first_name,
@@ -39,7 +47,7 @@ module.exports = {
             private_email : req.body.private_email,
             password: hash,
             address_id: address_id._id,
-            user_role_id: req.body.user_role_id
+            user_role_id: user_role_id
         }
         let result = await infrastructure.createUser(user)
         user._id = result.user_id
@@ -48,7 +56,7 @@ module.exports = {
     getAllUsers: async function (req) {
         let users  = await infrastructure.getAllEntities('admin','user')
         for (let user in users.result){ 
-            if ('user_role_id' in users.result[user]) {
+            if ('user_role_id' in users.result[user] && users.result[user].user_role_id != null) {
                 let role = await infrastructure.getEntity('admin',users.result[user].user_role_id)
                 users.result[user].user_role = role
             }

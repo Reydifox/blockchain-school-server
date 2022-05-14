@@ -15,6 +15,11 @@ function removeWallet(user_id) {
     fs.unlinkSync(full_path)
 }
 
+function getEntityName(entity_id) {
+    const last_underscore_index = entity_id.lastIndexOf('_')
+    const entity_name = entity_id.slice(0, last_underscore_index)
+    return entity_name
+}
 
 async function getAllFromDb(entity_name){
     const view_url = `_design/${entity_name}/_view/${entity_name}_all`
@@ -30,7 +35,9 @@ async function getAllEntities(user_id, entity_name){
     if (entity_location === 'db'){
         const response = await getAllFromDb(entity_name)
         response.data.rows.forEach(element => {
-            result_arr.push(element.value)
+            if(entity_name === getEntityName(element.value._id)) {
+                result_arr.push(element.value)
+            }
         });
     }
     else if(entity_location === 'ledger'){
@@ -38,9 +45,11 @@ async function getAllEntities(user_id, entity_name){
         const response_str = response.toString()
         const response_json = JSON.parse(response_str)
         response_json.result.forEach(element => {
-            let temp_obj = element.Record
-            temp_obj._id = element.Key
-            result_arr.push(temp_obj)
+            if(entity_name === getEntityName(element.Key)) {
+                let temp_obj = element.Record
+                temp_obj._id = element.Key
+                result_arr.push(temp_obj)
+            }
         })
     }
     result.result = result_arr
@@ -63,8 +72,7 @@ async function getUserEntity(user_id){
 // retrieves a single entity based on its id
 // id example: 'entityname_123456'
 async function getEntity(user_id, entity_id){
-    const last_underscore_index = entity_id.lastIndexOf('_')
-    const entity_name = entity_id.slice(0, last_underscore_index)
+    const entity_name = getEntityName(entity_id)
     const entity_location = getEntityLocation(entity_name)
     if (entity_name === 'user'){
         return await getUserEntity(entity_id)
@@ -88,8 +96,7 @@ async function getEntity(user_id, entity_id){
 
 async function updateEntity(user_id, entity){
     const entity_id = entity._id
-    const last_underscore_index = entity_id.lastIndexOf('_')
-    const entity_name = entity_id.slice(0, last_underscore_index)
+    const entity_name = getEntityName(entity_id)
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
         const response = await couch.update(dbname, entity)
@@ -126,8 +133,7 @@ async function putEntity(user_id, entity){
 
 
 async function deleteEntity(user_id, entity_id){
-    const last_underscore_index = entity_id.lastIndexOf('_')
-    const entity_name = entity_id.slice(0, last_underscore_index)
+    const entity_name = getEntityName(entity_id)
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
         const result = await getEntity(user_id, entity_id)
@@ -264,6 +270,15 @@ async function getUserSession(email, password){
     return result
 }
 
+async function entityExists(entity_id){
+    try {
+        const response = await getEntity('admin', entity_id)
+        return true
+    } catch(err) {
+        return false
+    }
+}
+
 
 // used for testing purposes
 async function main(){
@@ -277,6 +292,7 @@ module.exports.getEntity = getEntity
 module.exports.putEntity = putEntity
 module.exports.updateEntity = updateEntity
 module.exports.deleteEntity = deleteEntity
+module.exports.entityExists = entityExists
 module.exports.createUser = createUser
 module.exports.deleteUser = deleteUser
 module.exports.updateUser = updateUser

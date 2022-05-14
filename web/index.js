@@ -23,6 +23,13 @@ app.use(cors())
 app.use(express.urlencoded());
 app.use(express.json());
 
+const { get_userInfo, post_updateUser, get_userRole } = require('./Auth/auth.js');
+const roleModel = require('./Models/role')
+const { request } = require('http');
+const { response } = require('express');
+const { post } = require('./Routes/students');
+const role = require('./Models/role');
+
 app.use(session({
     secret: 'secret',
     resave: true,
@@ -134,13 +141,6 @@ const users = require('./Routes/users')
 const results = require('./Routes/results')
 const courses = require('./Routes/courses')
 const initializeData = require('./initialData')
-
-const { get_userInfo, post_updateUser, get_userRole } = require('./Auth/auth.js');
-const roleModel = require('./Models/role')
-const { request } = require('http');
-const { response } = require('express');
-const { post } = require('./Routes/students');
-const role = require('./Models/role');
 
 app.use('/students', students)
 app.use('/programme', programme)

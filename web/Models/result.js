@@ -5,11 +5,11 @@ const helpers = require('../Helpers/helpers');
 
 module.exports = {
     getResults: async function (req) {
-        let course_results  = await infrastructure.getAllEntities(auth.get_bearer(req),'course_result');
+        let course_results  = await infrastructure.getAllEntities('admin','course_result');
         return course_results.result;
     },
     getResult: async function (req) {
-        let allCourseResultsResult  = await infrastructure.getAllEntities(auth.get_bearer(req),'course_result');
+        let allCourseResultsResult  = await infrastructure.getAllEntities('admin','course_result');
         let allCourseResults = allCourseResultsResult.result;
         if(Array.isArray(allCourseResults) && allCourseResults) {
             for (i in allCourseResults){

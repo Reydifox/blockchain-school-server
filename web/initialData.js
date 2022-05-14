@@ -108,7 +108,7 @@ async function initializeData() {
         first_name: "Jan",
         last_name: "Mrkva",
         email:"xmrkva@stuba.sk",
-        password: undefined,
+        password: "955db0b81ef1989b4a4dfeae8061a9a6", // originalne je to "heslo"
         academic_degree: "doc. Ing.|PhD.",
         private_email:   "jan.mrkva@gmail.com",
         address_id: address4._id,
@@ -145,7 +145,7 @@ async function initializeData() {
         first_name: "Andrej",
         last_name: "Hronec",
         email:"xhronec@mail.sk",
-        password: undefined,
+        password: "955db0b81ef1989b4a4dfeae8061a9a6", // originalne je to "heslo"
         academic_degree: "Ing.|PhD.",
         private_email:  "andrej.hronec@gmail.com",
         address_id: address3._id,
@@ -159,7 +159,7 @@ async function initializeData() {
         first_name: "Jozef",
         last_name: "Kralik",
         email:"xkralik@stuba.sk",
-        password: undefined,
+        password: "955db0b81ef1989b4a4dfeae8061a9a6", // originalne je to "heslo"
         academic_degree: "doc. Ing.|PhD.",
         private_email:   "jozef.krail@gmail.com",
         address_id: address4._id,

@@ -15,10 +15,36 @@ function removeWallet(user_id) {
     fs.unlinkSync(full_path)
 }
 
+function getEntityName(entity_id) {
+    const last_underscore_index = entity_id.lastIndexOf('_')
+    const entity_name = entity_id.slice(0, last_underscore_index)
+    return entity_name
+}
 
 async function getAllFromDb(entity_name){
     const view_url = `_design/${entity_name}/_view/${entity_name}_all`
     return couch.get(dbname, view_url)
+}
+
+async function getAllUsers(){
+    let result_arr = []
+    const db_user_data = await getAllFromDb('user')
+    const ledger_user_data_raw = await ledger_query('admin', 'getAllEntities', 'user')
+    const ledger_user_data = JSON.parse(ledger_user_data_raw.toString())
+    db_user_data.data.rows.forEach(db_user => {
+        ledger_user_data.result.forEach(ledger_user => {
+            if (db_user.value._id == ledger_user.Key){
+                let full_user_data = {
+                    ...db_user.value,
+                    ...ledger_user.Record
+                }
+                result_arr.push(full_user_data)
+            }
+        })
+    })
+    return {
+        result: result_arr
+    }
 }
 
 // retrieve all entities of a given type defined by entity_name,
@@ -27,10 +53,15 @@ async function getAllEntities(user_id, entity_name){
     let result = {}
     let result_arr = []
     const entity_location = getEntityLocation(entity_name)
+    if (entity_name === 'user'){
+        return await getAllUsers()
+    }
     if (entity_location === 'db'){
         const response = await getAllFromDb(entity_name)
         response.data.rows.forEach(element => {
-            result_arr.push(element.value)
+            if(entity_name === getEntityName(element.value._id)) {
+                result_arr.push(element.value)
+            }
         });
     }
     else if(entity_location === 'ledger'){
@@ -38,9 +69,11 @@ async function getAllEntities(user_id, entity_name){
         const response_str = response.toString()
         const response_json = JSON.parse(response_str)
         response_json.result.forEach(element => {
-            let temp_obj = element.Record
-            temp_obj._id = element.Key
-            result_arr.push(temp_obj)
+            if(entity_name === getEntityName(element.Key)) {
+                let temp_obj = element.Record
+                temp_obj._id = element.Key
+                result_arr.push(temp_obj)
+            }
         })
     }
     result.result = result_arr
@@ -63,8 +96,7 @@ async function getUserEntity(user_id){
 // retrieves a single entity based on its id
 // id example: 'entityname_123456'
 async function getEntity(user_id, entity_id){
-    const last_underscore_index = entity_id.lastIndexOf('_')
-    const entity_name = entity_id.slice(0, last_underscore_index)
+    const entity_name = getEntityName(entity_id)
     const entity_location = getEntityLocation(entity_name)
     if (entity_name === 'user'){
         return await getUserEntity(entity_id)
@@ -88,8 +120,7 @@ async function getEntity(user_id, entity_id){
 
 async function updateEntity(user_id, entity){
     const entity_id = entity._id
-    const last_underscore_index = entity_id.lastIndexOf('_')
-    const entity_name = entity_id.slice(0, last_underscore_index)
+    const entity_name = getEntityName(entity_id)
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
         const response = await couch.update(dbname, entity)
@@ -126,8 +157,7 @@ async function putEntity(user_id, entity){
 
 
 async function deleteEntity(user_id, entity_id){
-    const last_underscore_index = entity_id.lastIndexOf('_')
-    const entity_name = entity_id.slice(0, last_underscore_index)
+    const entity_name = getEntityName(entity_id)
     const entity_location = getEntityLocation(entity_name)
     if (entity_location === 'db'){
         const result = await getEntity(user_id, entity_id)
@@ -264,6 +294,15 @@ async function getUserSession(email, password){
     return result
 }
 
+async function entityExists(entity_id){
+    try {
+        const response = await getEntity('admin', entity_id)
+        return true
+    } catch(err) {
+        return false
+    }
+}
+
 
 // used for testing purposes
 async function main(){
@@ -277,6 +316,7 @@ module.exports.getEntity = getEntity
 module.exports.putEntity = putEntity
 module.exports.updateEntity = updateEntity
 module.exports.deleteEntity = deleteEntity
+module.exports.entityExists = entityExists
 module.exports.createUser = createUser
 module.exports.deleteUser = deleteUser
 module.exports.updateUser = updateUser

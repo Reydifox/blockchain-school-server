@@ -10,15 +10,15 @@ module.exports = {
   },
   getCourseById: async function (req) {
     let course = await infrastructure.getEntity(auth.get_bearer(req), req.params.id);
-    if ('garant_id' in course) {
-      let garant = await infrastructure.getEntity(auth.get_bearer(req), course.garant_id)
-      course.garant = garant;
+    let garant = {}
+    if ('garant_id' in course && course.garant_id != null) {
+      garant = await infrastructure.getEntity(auth.get_bearer(req), course.garant_id)
     }
+    course.garant = garant;
     console.log(course.garant);
-
-    if ('prerequisite_course_id' in course) {
+    let coursePrerequisites = []
+    if ('prerequisite_course_id' in course && course.prerequisite_course_id != null) {
       if(Array.isArray(course.prerequisite_course_id) && course.prerequisite_course_id.length) {
-        let coursePrerequisites = []
         console.log(course.prerequisite_course_id);
         for (let item in course.prerequisite_course_id) {
           let courseId = course.prerequisite_course_id[item];
@@ -26,10 +26,10 @@ module.exports = {
           console.log(tmp_course);
           coursePrerequisites.push(tmp_course);
         }
-      course.prerequisite_course = coursePrerequisites;
-      console.log(course.prerequisite_course);
       }
     }
+    course.prerequisite_course = coursePrerequisites;
+    console.log(course.prerequisite_course);
     return course;
   },
   addCourse: async function (req) {

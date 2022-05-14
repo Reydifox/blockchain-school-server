@@ -67,7 +67,7 @@ async function initializeData() {
         first_name: "Marek",
         last_name: "Lunter",
         email:"xlunter@stuba.sk",
-        password: undefined,
+        password: "955db0b81ef1989b4a4dfeae8061a9a6", // originalne je to "heslo"
         academic_degree: "Bc.",
         private_email:   "marek.lunter@gmail.com",
         address_id: address2._id
@@ -106,7 +106,7 @@ async function initializeData() {
         garant_id: undefined,
         name: "Progamovanie 1",
         acronym: "PROG-1",
-        descriptiom: "aifoanfoaif",
+        description: "aifoanfoaif",
         trimester: undefined,
         prerequisite_course_id: undefined
     })
@@ -118,7 +118,7 @@ async function initializeData() {
         garant_id: undefined,
         name: "Progamovanie 2",
         acronym: "PROG-2",
-        descriptiom: "prog2 desc",
+        description: "prog2 desc",
         trimester: undefined,
         prerequisite_course_id: undefined
     })
@@ -130,7 +130,7 @@ async function initializeData() {
         garant_id: undefined,
         name: "Programovacie Techniky",
         acronym: "PT",
-        descriptiom: "PT desc",
+        description: "PT desc",
         trimester: undefined,
         prerequisite_course_id: undefined
     })
@@ -141,7 +141,7 @@ async function initializeData() {
         garant_id: undefined,
         name: "Logika",
         acronym: "LOG",
-        descriptiom: "log desc",
+        description: "log desc",
         trimester: undefined,
         prerequisite_course_id: undefined
     })
@@ -173,7 +173,7 @@ async function initializeData() {
         acronym:"ELK"
     })
     console.log(programme)
-
+/*
     system_credibility = await infrastructure.putEntity('admin', {
         entity_name: "system_credibility",
         name: "Sys Credibility 1",
@@ -202,11 +202,46 @@ async function initializeData() {
     console.log('-----------------------')
     console.log(system_credibility_id)
     console.log('-----------------------')
+*/
+    role1 = await infrastructure.putEntity('admin',{
+        entity_name: "user_role",
+        system_credibility_id: [],
+        name : "Dean",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
 
     role1 = await infrastructure.putEntity('admin',{
         entity_name: "user_role",
-        system_credibility_id: [system_credibility_id._id],
-        name : "Rola1",
+        system_credibility_id: [],
+        name : "Lecturer",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    role1 = await infrastructure.putEntity('admin',{
+        entity_name: "user_role",
+        system_credibility_id: [],
+        name : "Course garant",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    role1 = await infrastructure.putEntity('admin',{
+        entity_name: "user_role",
+        system_credibility_id: [],
+        name : "Programme garant",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    role1 = await infrastructure.putEntity('admin',{
+        entity_name: "user_role",
+        system_credibility_id: [],
+        name : "Subdean",
+        definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    })
+
+    role1 = await infrastructure.putEntity('admin',{
+        entity_name: "user_role",
+        system_credibility_id: [],
+        name : "System admin",
         definition: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     })
     console.log(role1)

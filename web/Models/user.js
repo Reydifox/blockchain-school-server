@@ -1,6 +1,7 @@
 const auth = require('../Auth/auth')
 const infrastructure = require('../../fabcar/api/api.js');
 const helpers = require('../Helpers/helpers');
+var crypto = require('crypto')
 
 module.exports = {
     getUserById: async function (req) {
@@ -27,6 +28,8 @@ module.exports = {
         } else { 
             let address_id = undefined
         }
+        let password = req.body.password; 
+        var hash = crypto.createHash('md5').update(password).digest('hex')
         let user = {
             user_type: req.body.user_type,
             first_name : req.body.first_name,
@@ -34,6 +37,7 @@ module.exports = {
             email : req.body.email,
             academic_degree : req.body.academic_degree,
             private_email : req.body.private_email,
+            password: hash,
             address_id: address_id._id,
             user_role_id: req.body.user_role_id
         }
@@ -43,7 +47,6 @@ module.exports = {
     },
     getAllUsers: async function (req) {
         let users  = await infrastructure.getAllEntities('admin','user')
-        console.log(users.result)
         for (let user in users.result){ 
             if ('user_role_id' in users.result[user]) {
                 let role = await infrastructure.getEntity('admin',users.result[user].user_role_id)

@@ -305,7 +305,7 @@ async function initializeData() {
         course_id: course2._id,
         academic_year: "2022"
     })
-    course_result1 = await helpers.getLatestID('course_result')
+    course_result2 = await helpers.getLatestID('course_result')
     console.log(course_result2)
 }
 

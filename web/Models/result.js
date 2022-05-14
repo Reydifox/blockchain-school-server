@@ -32,5 +32,16 @@ module.exports = {
         course_result.entity_name = 'course_result';
         let result = await infrastructure.putEntity('admin', course_result);
         return course_result;
+    },
+    editResult: async function (req) {
+        let course_result = await infrastructure.getEntity(auth.get_bearer(req), req.params.id);
+        course_result.final_result = req.body.final_result;
+        course_result.midterm_result = req.body.midterm_result;
+        course_result.seminar_grading_record = req.body.seminar_grading_record;
+        course_result.academic_year = req.body.academic_year;
+        course_result.student_id = req.body.student_id;
+        course_result.course_id = req.body.course_id;
+        result = await infrastructure.updateEntity(auth.get_bearer(req), course_result);
+        return result;
     }
 };

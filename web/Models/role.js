@@ -4,7 +4,7 @@ const helpers = require('../Helpers/helpers');
 
 module.exports = {
     getAllRoles: async function (req) {
-        let result = await infrastructure.getAllEntities(auth.get_bearer(req),'user_role')
+        let result = await infrastructure.getAllEntities('admin','user_role')
         return result.result
     },
     addUserRole: async function (req) {
@@ -22,22 +22,22 @@ module.exports = {
             definition:req.body.definition,
             system_credibility_id: credibilities
         }
-        let result = await infrastructure.putEntity(auth.get_bearer(req), role)
+        let result = await infrastructure.putEntity('admin', role)
         role.id = result.id
         return role
     },
     getUserRoleById: async function (req) {
-        let role = await infrastructure.getEntity(auth.get_bearer(req), req.params.id)
+        let role = await infrastructure.getEntity('admin', req.params.id)
         let system_credibilities = await helpers.getSystemCredibilities(role.system_credibility_id)
         role.system_credibilities = system_credibilities
         return role
     },
     deleteUserRole: async function (req) {
-        let result = await infrastructure.deleteEntity(auth.get_bearer(req),req.params.id)
+        let result = await infrastructure.deleteEntity('admin',req.params.id)
         return result
     },
     getAllCreditibilities: async function (req) {
-        let result = await infrastructure.getAllEntities(auth.get_bearer(req),'system_credibility')
+        let result = await infrastructure.getAllEntities('admin','system_credibility')
         return result.result
     },
     updateUserRole: async function (req) {
@@ -49,12 +49,12 @@ module.exports = {
                 })
             }
         }
-        let role = await infrastructure.getEntity(auth.get_bearer(req),req.params.id)
+        let role = await infrastructure.getEntity('admin',req.params.id)
         role.name = req.body.name,
         role.definition = req.body.definition,
         role.system_credibility_id = credibilities
     
-        let result = await infrastructure.updateEntity(auth.get_bearer(req),role)
+        let result = await infrastructure.updateEntity('admin',role)
         if (result.data.ok) {
             return role
         }

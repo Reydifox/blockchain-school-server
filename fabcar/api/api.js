@@ -42,7 +42,9 @@ async function getAllUsers(){
             }
         })
     })
-    return result_arr
+    return {
+        result: result_arr
+    }
 }
 
 // retrieve all entities of a given type defined by entity_name,

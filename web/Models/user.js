@@ -87,6 +87,7 @@ module.exports = {
             console.log('------------------------')
             console.log(req.body)
         } 
+        delete user_request.password
 
         let result = await infrastructure.updateUser(user_request)
         

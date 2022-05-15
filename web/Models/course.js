@@ -40,6 +40,7 @@ module.exports = {
       description: req.body.description,
       trimester: req.body.trimester,
       prerequisite_course_id: req.body.prerequisite_course_id,
+      lecturer_id: req.body.lecturer_id,
     };
     course.entity_name = 'course';
     let result = await infrastructure.putEntity('admin', course);

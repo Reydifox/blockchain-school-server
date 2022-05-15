@@ -1,17 +1,22 @@
 const auth = require('../Auth/auth')
 const infrastructure = require('../../fabcar/api/api.js');
-const user = require('./user');
+const user_functions = require('./user');
 const helpers = require('../Helpers/helpers');
 
 module.exports = {
   getAllStudents: async function (req) {
-    let users  = await user.getAllUsers(req)
+    let users  = await user_functions.getAllUsers(req)
     let output = []
-    users.forEach(user => { 
+    for (id in users) {
+      var user = users[id]
       if (user.user_type == 'student') {
+        if ('study_programme_id' in user) {
+          let programme = await infrastructure.getEntity('admin',user.study_programme_id)
+          user.study_programme = programme
+        }
         output.push(user)
       }
-    });
+    }
     return output
   },
   getStudentByProgramId: function (req) {

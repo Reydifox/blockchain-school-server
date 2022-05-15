@@ -21,14 +21,14 @@ async function initializeData() {
         house_number: "384/4",
         city: "Stara Lubovna",
         postal_code: "06401",
-        county: "Slovensko",
+        country: "Slovensko",
     })
     address12 = await infrastructure.putEntity('student', {
         street: "Sturova",
         house_number: "384/4",
         city: "Stara Lubovna",
         postal_code: "06401",
-        county: "Slovensko",
+        country: "Slovensko",
         entity_name:"address"
     })
     address1 = await helpers.getLatestID('address')
@@ -38,7 +38,7 @@ async function initializeData() {
         house_number: "217/12",
         city: "Spisska Bela",
         postal_code: "05901",
-        county: "Slovensko",
+        country: "Slovensko",
         entity_name:"address"
     })
     address2 = await helpers.getLatestID('address')
@@ -48,7 +48,7 @@ async function initializeData() {
         house_number: "34/523",
         city: "Bratislava",
         postal_code: "81101",
-        county: "Slovensko",
+        country: "Slovensko",
         entity_name:"address"
     })
     address3 = await helpers.getLatestID('address')
@@ -58,7 +58,7 @@ async function initializeData() {
         house_number: "58",
         city: "Malacky",
         postal_code: "08725",
-        county: "Slovensko",
+        country: "Slovensko",
         entity_name:"address"
     })
     address4 = await helpers.getLatestID('address')
@@ -134,7 +134,7 @@ async function initializeData() {
         first_name: "Marek",
         last_name: "Drab",
         email:"xdrabm@stuba.sk",
-        password: undefined,
+        password: "955db0b81ef1989b4a4dfeae8061a9a6", // originalne je to "heslo"
         academic_degree: "Bc.",
         private_email:   "marek.drablp@gmail.com",
         address_id: address1._id,

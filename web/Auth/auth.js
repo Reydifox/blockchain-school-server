@@ -16,7 +16,9 @@ module.exports = {
         return user;
     },
     post_updateUser: async function(req){
-        const result = await infrastructure.updateUser(req);
+        var user = await infrastructure.getEntity('admin', req.id)
+        user.password = req.password
+        const result = await infrastructure.updateUser(user);
         return result;
     },
     get_userRole: async function(user_role_id){

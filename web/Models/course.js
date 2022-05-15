@@ -132,4 +132,18 @@ module.exports = {
     }
     return studentCourses;
   },
+  getCourseStudents: async function (req) {
+    let allCourseResultsResult  = await infrastructure.getAllEntities('admin','course_result');
+    let allCourseResults = allCourseResultsResult.result;
+    let courseStudents = [];
+    if(Array.isArray(allCourseResults) && allCourseResults) {
+      for (i in allCourseResults){
+        if (allCourseResults[i].course_id == req.params.id) {
+          let student = await infrastructure.getEntity('admin', allCourseResults[i].student_id);
+          courseStudents.push(student);
+        }
+      }
+    }
+    return courseStudents;
+  }
 };

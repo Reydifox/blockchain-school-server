@@ -2,6 +2,20 @@ const infrastructure = require('../fabcar/api/api.js');
 const helpers = require('./Helpers/helpers')
 
 async function initializeData() {
+    programme1 = await infrastructure.putEntity('admin', {
+        entity_name:"study_programme",
+        name:"Aplikovana inf",
+        acronym:"API"
+    })
+    console.log(programme1.data)
+ 
+    programme2 = await infrastructure.putEntity('admin', {
+        entity_name:"study_programme",
+        name:"Elektrotechnika",
+        acronym:"ELK"
+    })
+    console.log(programme2)
+
     address1 = await helpers.putAddress({
         street: "Sturova",
         house_number: "384/4",
@@ -123,7 +137,8 @@ async function initializeData() {
         password: undefined,
         academic_degree: "Bc.",
         private_email:   "marek.drablp@gmail.com",
-        address_id: address1._id
+        address_id: address1._id,
+        study_programme_id: programme1.data.id
     })
     console.log(student1)
 
@@ -135,7 +150,8 @@ async function initializeData() {
         password: "955db0b81ef1989b4a4dfeae8061a9a6", // originalne je to "heslo"
         academic_degree: "Bc.",
         private_email:   "marek.lunter@gmail.com",
-        address_id: address2._id
+        address_id: address2._id,
+        study_programme_id: programme2.data.id
     })
     student2 = await helpers.getLatestID('user')
     console.log(student2)
@@ -226,7 +242,7 @@ async function initializeData() {
     })
     course5 = await helpers.getLatestID('course')
     console.log(course5)
-
+/*
     programme = await infrastructure.putEntity('admin', {
         entity_name:"study_programme",
         name:"Aplikovana inf",

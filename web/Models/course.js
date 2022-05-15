@@ -5,14 +5,14 @@ const helpers = require('../Helpers/helpers');
 
 module.exports = {
   getAllCourses: async function (req) {
-    let courses  = await infrastructure.getAllEntities(auth.get_bearer(req),'course')
+    let courses  = await infrastructure.getAllEntities('admin','course')
     return courses.result
   },
   getCourseById: async function (req) {
-    let course = await infrastructure.getEntity(auth.get_bearer(req), req.params.id);
+    let course = await infrastructure.getEntity('admin', req.params.id);
     let garant = {}
     if ('garant_id' in course && course.garant_id != null) {
-      garant = await infrastructure.getEntity(auth.get_bearer(req), course.garant_id)
+      garant = await infrastructure.getEntity('admin', course.garant_id)
     }
     course.garant = garant;
     console.log(course.garant);
@@ -22,7 +22,7 @@ module.exports = {
         console.log(course.prerequisite_course_id);
         for (let item in course.prerequisite_course_id) {
           let courseId = course.prerequisite_course_id[item];
-          let tmp_course = await infrastructure.getEntity(auth.get_bearer(req), courseId);
+          let tmp_course = await infrastructure.getEntity('admin', courseId);
           console.log(tmp_course);
           coursePrerequisites.push(tmp_course);
         }
@@ -46,32 +46,32 @@ module.exports = {
     return course;
   },
   editCourseById: async function(req) {
-    let course = await infrastructure.getEntity(auth.get_bearer(req), req.params.id);
+    let course = await infrastructure.getEntity('admin', req.params.id);
     course.garant_id = req.body.garant_id;
     course.name = req.body.name;
     course.acronym = req.body.acronym;
     course.description = req.body.description;
     course.trimester = req.body.trimester;
     course.prerequisite_course_id = req.body.prerequisite_course_id;
-    result = await infrastructure.updateEntity(auth.get_bearer(req), course);
+    result = await infrastructure.updateEntity('admin', course);
     return result;
   },
   deleteCourse: async function(req) {
-    let result = await infrastructure.deleteEntity(auth.get_bearer(req), req.params.id);
+    let result = await infrastructure.deleteEntity('admin', req.params.id);
     return result
   },
   setGarant: async function (req) {
-    let course = await infrastructure.getEntity(auth.get_bearer(req), req.params.id);
+    let course = await infrastructure.getEntity('admin', req.params.id);
     if ('garant_id' in req.body) {
-      let garant = await infrastructure.getEntity(auth.get_bearer(req), req.body.garant_id);
+      let garant = await infrastructure.getEntity('admin', req.body.garant_id);
       course.garant = garant;
       course.garant_id = req.body.garant_id;
-      result = await infrastructure.updateEntity(auth.get_bearer(req), course);
+      result = await infrastructure.updateEntity('admin', course);
     }
     return result;
   },
   addPrerequisite: async function(req) {
-    let course = await infrastructure.getEntity(auth.get_bearer(req), req.params.id);
+    let course = await infrastructure.getEntity('admin', req.params.id);
     if ('prerequisite_course_id' in req.body) {
       if(Array.isArray(course.prerequisite_course_id) && course.prerequisite_course_id.length) {
         course.prerequisite_course_id.push(req.body.prerequisite_course_id);
@@ -79,12 +79,12 @@ module.exports = {
       else{
         course.prerequisite_course_id = req.body.prerequisite_course_id;
       }
-      result = await infrastructure.updateEntity(auth.get_bearer(req), course);
+      result = await infrastructure.updateEntity('admin', course);
     }
     return result;
   },
   getGarantCourses: async function(req) {
-    let allCoursesResult  = await infrastructure.getAllEntities(auth.get_bearer(req),'course');
+    let allCoursesResult  = await infrastructure.getAllEntities('admin','course');
     let allCourses = allCoursesResult.result;
     let garantCourses = []
     if(Array.isArray(allCourses) && allCourses) {
@@ -100,7 +100,7 @@ module.exports = {
   },
 
   getLecturerCourses: async function(req) {
-    let allCoursesResult  = await infrastructure.getAllEntities(auth.get_bearer(req),'course');
+    let allCoursesResult  = await infrastructure.getAllEntities('admin','course');
     let allCourses = allCoursesResult.result;
     let lecturerCourses = []
     if(Array.isArray(allCourses) && allCourses) {
@@ -119,17 +119,31 @@ module.exports = {
   },
 
   getStudentCourses: async function(req) {
-    let allCourseResultsResult  = await infrastructure.getAllEntities(auth.get_bearer(req),'course_result');
+    let allCourseResultsResult  = await infrastructure.getAllEntities('admin','course_result');
     let allCourseResults = allCourseResultsResult.result;
     let studentCourses = []
     if(Array.isArray(allCourseResults) && allCourseResults) {
       for (i in allCourseResults){
         if (allCourseResults[i].student_id == req.params.id) {
-          let course = await infrastructure.getEntity(auth.get_bearer(req), allCourseResults[i].course_id);
+          let course = await infrastructure.getEntity('admin', allCourseResults[i].course_id);
           studentCourses.push(course);
         }
       }
     }
     return studentCourses;
   },
+  getCourseStudents: async function (req) {
+    let allCourseResultsResult  = await infrastructure.getAllEntities('admin','course_result');
+    let allCourseResults = allCourseResultsResult.result;
+    let courseStudents = [];
+    if(Array.isArray(allCourseResults) && allCourseResults) {
+      for (i in allCourseResults){
+        if (allCourseResults[i].course_id == req.params.id) {
+          let student = await infrastructure.getEntity('admin', allCourseResults[i].student_id);
+          courseStudents.push(student);
+        }
+      }
+    }
+    return courseStudents;
+  }
 };

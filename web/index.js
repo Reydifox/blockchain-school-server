@@ -90,16 +90,20 @@ app.get('/home', function(req,res){
     }
 })
 
-app.get('/logout', function(req,res){
+app.post('/logout', function(req,res){
     req.session.loggedin = false
     res.send("You have been succesfully logged out")
 })
 
-app.get('/changePassword', async function(req,res){
+app.post('/changePassword', async function(req,res){
     if(req.session.loggedin){
-        const user = req.session.user;
+        //const user = req.session.user;
+        var user = {
+            id: req.body.id
+        }
         var newHash = crypto.createHash('md5').update(req.body.password).digest('hex');
         user.password = newHash;
+
         const result = await post_updateUser(user);
         if(result.successful){
             res.send("Password changed succesfully");

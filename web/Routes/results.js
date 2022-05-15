@@ -25,6 +25,15 @@ router.route('/')
     } 
   })
 
+  router.delete('/:id', async (req, res) => {
+    try {
+      let result  = await course_result.deleteResult(req)
+      res.json(result)
+    } catch (e) {
+      res.json(e)
+    } 
+  })
+
 router.get('/:course_id', async (req, res) => {
   res.json([course_result, course_result])
 })

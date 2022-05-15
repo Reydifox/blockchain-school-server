@@ -70,18 +70,26 @@ module.exports = {
     updateUser: async function (req) {
         let user = await infrastructure.getEntity('admin',req.params.id)
         let user_request = req.body
-        let address = req.body.address
-        let address_from_db = await helpers.getAddress(user.address_id)
-        console.log(address)
-        console.log('------------------')
-        console.log(address_from_db)
-        address._id = address_from_db._id
+        
         user_request._id = user._id
         user_request._rev = user._rev
-        let result_address = await infrastructure.updateEntity(address)
+
+        let result_address = await infrastructure.updateEntity('admin',req.body.address)
+        if ('user_role' in req.body ) {
+            console.log(req.body)
+            delete req.body.user_role
+            console.log('------------------------')
+            console.log(req.body)
+        } 
+        if ('study_programme' in req.body ) {
+            console.log(req.body)
+            delete req.body.study_programme
+            console.log('------------------------')
+            console.log(req.body)
+        } 
+
         let result = await infrastructure.updateUser(user_request)
-        console.log(result_address)
-        //if (result.successful && result_address)
+        
         return result
       },
 }

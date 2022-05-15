@@ -87,7 +87,7 @@ module.exports = {
             console.log('------------------------')
             console.log(req.body)
         } 
-        if (user_request.password != null || user_request.password == "") {
+        if (user_request.password != null || user_request.password != "") {
             var password = user_request.password
             var hash = crypto.createHash('md5').update(password).digest('hex')
             user_request.password = hash

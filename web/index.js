@@ -58,7 +58,11 @@ app.post('/login', async (req, res) =>{
         req.session.loggedin = true;
         req.session.user = user;
         req.params.user_id = user._id;
-        const role = await get_userRole(user.user_role_id);
+        if ('user_role_id' in user) {
+            const role = await get_userRole(user.user_role_id);
+        } else {
+            const role = {}
+        }
         jwt.sign({user: user}, secret_key, {expiresIn: '2h'}, (err, token) => {
             res.json({
                 successful: "True",

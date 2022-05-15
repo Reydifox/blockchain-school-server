@@ -28,6 +28,12 @@ module.exports = {
         }
       }
     }
+    if ('lecturer_id' in course && course.lecturer_id != null) {
+      var lecturer = await infrastructure.getEntity('admin', course.lecturer_id)
+    } else {
+      var lecturer = {}
+    }
+    course.lecturer = lecturer
     course.prerequisite_course = coursePrerequisites;
     console.log(course.prerequisite_course);
     return course;

@@ -48,7 +48,12 @@ router.get('/results/:student_id/detail', async (req, res) => {
 })
 
 router.get('/:id/students', async (req, res) => {
-  res.json([person, person])
+  try {
+    let result  = await course.getCourseStudents(req)
+    res.json(result)
+  } catch (e) {
+    res.json(e)
+  }  
 })
 
 router.get('/:id/file', async (req, res) => {

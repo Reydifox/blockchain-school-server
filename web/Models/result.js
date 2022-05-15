@@ -34,14 +34,18 @@ module.exports = {
         return course_result;
     },
     editResult: async function (req) {
-        let course_result = await infrastructure.getEntity(auth.get_bearer(req), req.params.id);
+        let course_result = await infrastructure.getEntity('admin', req.params.id);
         course_result.final_result = req.body.final_result;
         course_result.midterm_result = req.body.midterm_result;
         course_result.seminar_grading_record = req.body.seminar_grading_record;
         course_result.academic_year = req.body.academic_year;
         course_result.student_id = req.body.student_id;
         course_result.course_id = req.body.course_id;
-        result = await infrastructure.updateEntity(auth.get_bearer(req), course_result);
+        result = await infrastructure.updateEntity('admin', course_result);
         return result;
+    },
+    deleteResult: async function (req) {
+        let result = await infrastructure.deleteEntity('admin', req.params.id);
+        return result
     }
 };

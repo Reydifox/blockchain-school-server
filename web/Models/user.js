@@ -14,6 +14,10 @@ module.exports = {
             let role = await infrastructure.getEntity('admin',user.user_role_id)
             user.user_role = role
         }
+        if ('study_programme_id' in user) {
+            let programme = await infrastructure.getEntity('admin',user.study_programme_id)
+            user.study_programme = programme
+        }
         return user
     },
     deleteUser: async function (req) {
